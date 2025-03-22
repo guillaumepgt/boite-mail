@@ -21,11 +21,21 @@ hauteur_ecran = fenetre.winfo_screenheight()
 def boite_de_reception():
     fenetre = Tk()
     fenetre.title("Boite de réception")
-    fenetre.attributes("-fullscreen", True)  # Active le mode plein écran
-    fenetre.iconbitmap("logo.ico")  # Vérifiez que "logo.ico" existe
+    fenetre.attributes("-fullscreen", True)  
+    fenetre.iconbitmap("logo.ico")
 
-    for i in range(10):
-        Button(fenetre, text="Mail "+str(i+1), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.2, y=hauteur_ecran*(0.1 + 0.1*i), width=largeur_ecran*0.6, height=hauteur_ecran*0.1)
+    j = 0
+
+    for i in range(3):
+        Button(fenetre, text="Personne "+str(i+1+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.1, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+        Button(fenetre, text="Personne "+str(i+2+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.4, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+        Button(fenetre, text="Personne "+str(i+3+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.7, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+        j += 1
+
+
+
+
+
 
 
 def ecrire_mail():
@@ -53,11 +63,11 @@ bouton_ecrire_mail.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.2, width=largeu
 
 
 bouton_categories = Button(fenetre, text="Categories", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
-bouton_categories.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.55, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+bouton_categories.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
 bouton_corbeille = Button(fenetre, text="Corbeille", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
-bouton_corbeille.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.55, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+bouton_corbeille.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
 
