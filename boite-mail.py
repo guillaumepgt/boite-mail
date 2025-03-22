@@ -14,10 +14,37 @@ largeur_ecran = fenetre.winfo_screenwidth()
 hauteur_ecran = fenetre.winfo_screenheight()
 
 
+# Création des fonctions du programme
+
+# Fonction pour chaque bouton
+
+def boite_de_reception():
+    fenetre = Tk()
+    fenetre.title("Boite de réception")
+    fenetre.attributes("-fullscreen", True)  # Active le mode plein écran
+    fenetre.iconbitmap("logo.ico")  # Vérifiez que "logo.ico" existe
+
+    for i in range(10):
+        Button(fenetre, text="Mail "+str(i+1), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.2, y=hauteur_ecran*(0.1 + 0.1*i), width=largeur_ecran*0.6, height=hauteur_ecran*0.1)
+
+
+def ecrire_mail():
+    pass
+
+
+def categories():
+    pass
+
+
+def corbeille():
+    pass
+
+
+
 # Création des 4 rectangles de menu
 
 
-bouton_boite_de_reception = Button(fenetre, text="Boite de réception", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
+bouton_boite_de_reception = Button(fenetre, text="Boite de réception", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=boite_de_reception)
 bouton_boite_de_reception.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
@@ -31,6 +58,8 @@ bouton_categories.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.55, width=largeur
 
 bouton_corbeille = Button(fenetre, text="Corbeille", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
 bouton_corbeille.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.55, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+
+
 
 
 
