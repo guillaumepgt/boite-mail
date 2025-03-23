@@ -13,12 +13,18 @@ fenetre.bind("<Escape>", lambda event: fenetre.attributes("-fullscreen", False))
 largeur_ecran = fenetre.winfo_screenwidth()
 hauteur_ecran = fenetre.winfo_screenheight()
 
+
 # Charger l'image (uniquement PNG ou GIF)
 chemin_image_mail = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\mail.png"
-photo = PhotoImage(file=chemin_image_mail)
+photo_mail = PhotoImage(file=chemin_image_mail)
+chemin_image_poubelle = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\poubelle.png"
+photo_poubelle = PhotoImage(file=chemin_image_poubelle)
 
 # Empêcher la suppression de l’image
-photo.image = photo
+photo_mail.image = photo_mail
+photo_poubelle.image = photo_poubelle
+
+
 
 # Création des fonctions du programme
 
@@ -31,11 +37,6 @@ def boite_de_reception():
     fenetre_boite.title("Boite de réception")
     fenetre_boite.attributes("-fullscreen", True)
     fenetre_boite.iconbitmap("logo.ico")
-
-    # Affichage du logo
-    label_logo = Label(fenetre_boite, image=photo)
-    label_logo.place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05, width=largeur_ecran * 0.2, height=hauteur_ecran * 0.2)
-    label_logo.image = photo
 
     j = 0
 
@@ -67,11 +68,11 @@ def corbeille():
 # Création des 4 rectangles de menu
 
 
-bouton_boite_de_reception = Button(fenetre, text="Boite de réception", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=boite_de_reception)
+bouton_boite_de_reception = Button(fenetre, text="Boite de réception", image=photo_mail, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=boite_de_reception)
 bouton_boite_de_reception.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-bouton_ecrire_mail = Button(fenetre, text="Ecrire un mail", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
+bouton_ecrire_mail = Button(fenetre, text="Ecrire un mail", image=photo_poubelle, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20,)
 bouton_ecrire_mail.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
