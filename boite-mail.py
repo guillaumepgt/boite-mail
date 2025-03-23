@@ -13,23 +13,36 @@ fenetre.bind("<Escape>", lambda event: fenetre.attributes("-fullscreen", False))
 largeur_ecran = fenetre.winfo_screenwidth()
 hauteur_ecran = fenetre.winfo_screenheight()
 
+# Charger l'image (uniquement PNG ou GIF)
+chemin_image_mail = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\mail.png"
+photo = PhotoImage(file=chemin_image_mail)
+
+# Empêcher la suppression de l’image
+photo.image = photo
 
 # Création des fonctions du programme
 
 # Fonction pour chaque bouton
 
 def boite_de_reception():
-    fenetre = Tk()
-    fenetre.title("Boite de réception")
-    fenetre.attributes("-fullscreen", True)  
-    fenetre.iconbitmap("logo.ico")
+
+    # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
+    fenetre_boite = Toplevel(fenetre)
+    fenetre_boite.title("Boite de réception")
+    fenetre_boite.attributes("-fullscreen", True)
+    fenetre_boite.iconbitmap("logo.ico")
+
+    # Affichage du logo
+    label_logo = Label(fenetre_boite, image=photo)
+    label_logo.place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05, width=largeur_ecran * 0.2, height=hauteur_ecran * 0.2)
+    label_logo.image = photo
 
     j = 0
 
     for i in range(3):
-        Button(fenetre, text="Personne "+str(i+1+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.1, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
-        Button(fenetre, text="Personne "+str(i+2+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.4, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
-        Button(fenetre, text="Personne "+str(i+3+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.7, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+        Button(fenetre_boite, text="Personne "+str(i+1+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.1, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+        Button(fenetre_boite, text="Personne "+str(i+2+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.4, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+        Button(fenetre_boite, text="Personne "+str(i+3+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.7, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
         j += 1
 
 
