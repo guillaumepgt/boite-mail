@@ -9,9 +9,8 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
 SCOPES = ['https://mail.google.com/']
-CREDENTIALS_FILE = 'token.pkl'  # Fichier où les tokens sont stockés
+CREDENTIALS_FILE = 'token.pkl'
 
-# Fonction pour récupérer et rafraîchir les tokens OAuth2
 def get_credentials():
     creds = None
     # Si un token existe déjà
@@ -26,7 +25,7 @@ def get_credentials():
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
                 'client_secret.json', SCOPES)
-            creds = flow.run_local_server(port=0)
+            creds = flow.run_local_server(port=5000)
 
         # Sauvegarde des nouveaux credentials
         with open(CREDENTIALS_FILE, 'wb') as token:
