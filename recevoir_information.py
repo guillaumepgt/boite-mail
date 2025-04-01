@@ -13,7 +13,7 @@ SCOPES = [
 ]
 
 CREDENTIALS_FILE = "token.pkl"
-CLIENT_SECRET_FILE = "client_secret_1040824584369-tniff32l92u04onopvu8i3pehocq72cu.apps.json"
+CLIENT_SECRET_FILE = "client_secret.json"
 
 def get_credentials():
     """ Authentifie l'utilisateur et gère les credentials OAuth2. """
@@ -27,7 +27,7 @@ def get_credentials():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
-            creds = flow.run_local_server(port=5000, include_granted_scopes=True)
+            creds = flow.run_local_server(port=5000)
 
         with open(CREDENTIALS_FILE, "wb") as token:
             pickle.dump(creds, token)
