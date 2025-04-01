@@ -1,4 +1,8 @@
-def get_credentials():
+import os
+import pickle
+from google_auth_oauthlib.flow import InstalledAppFlow
+
+def get_credentials(CREDENTIALS_FILE, SCOPES):
     creds = None
     # Si un token existe déjà
     if os.path.exists(CREDENTIALS_FILE):
@@ -17,5 +21,4 @@ def get_credentials():
         # Sauvegarde des nouveaux credentials
         with open(CREDENTIALS_FILE, 'wb') as token:
             pickle.dump(creds, token)
-
     return creds

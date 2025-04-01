@@ -1,37 +1,16 @@
-import os
+# import os
 import base64
-import pickle
+# import pickle
 import smtplib
-from email.mime.multipart import MIMEMultipart
+# from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
-from google_auth_oauthlib.flow import InstalledAppFlow
+# from google.auth.transport.requests import Request
+# from google.oauth2.credentials import Credentials
+# from google_auth_oauthlib.flow import InstalledAppFlow
+from get_tokens import *
 
 SCOPES = ['https://mail.google.com/']
 CREDENTIALS_FILE = 'token.pkl'
-
-def get_credentials():
-    creds = None
-    # Si un token existe déjà
-    if os.path.exists(CREDENTIALS_FILE):
-        with open(CREDENTIALS_FILE, 'rb') as token:
-            creds = pickle.load(token)
-
-    # Si les credentials sont invalides ou expirés
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'client_secret.json', SCOPES)
-            creds = flow.run_local_server(port=5000)
-
-        # Sauvegarde des nouveaux credentials
-        with open(CREDENTIALS_FILE, 'wb') as token:
-            pickle.dump(creds, token)
-
-    return creds
 
 # Fonction pour générer l'authentification OAuth2
 def generate_oauth2_string(username, access_token):
@@ -40,7 +19,7 @@ def generate_oauth2_string(username, access_token):
 
 # Fonction pour envoyer un e-mail
 def send_email(subject, body, sender, recipients):
-    creds = get_credentials()  # Récupérer les credentials
+    creds = get_credentials(CREDENTIALS_FILE, SCOPES)  # Récupérer les credentials
     access_token = creds.token  # Accéder au token d'accès
 
     # Générer la chaîne d'authentification
@@ -66,10 +45,11 @@ def send_email(subject, body, sender, recipients):
 # Exécution du programme principal
 if __name__ == '__main__':
     # Définir les informations nécessaires
-    sender = 'mailboite07@gmail.com'
-    recipients = ['ugo.bernard@reseau.eseo.fr']
-    subject = "salut"
-    body = "gourmand"
+    sender = 'ouion547@gmail.com'
+    recipients = ['mailboite07@gmail.com']
+    subject = "salo"
+    body = "gourmandiiiiiises heinnn"
 
     # Envoyer l'e-mail
-    send_email(subject, body, sender, recipients)
+    while True:
+        send_email(subject, body, sender, recipients)
