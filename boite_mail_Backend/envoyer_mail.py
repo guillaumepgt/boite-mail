@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 from boite_mail_Backend.get_tokens import *
 
 SCOPES = ['https://mail.google.com/']
-CREDENTIALS_FILE = 'token.pkl'
+CREDENTIALS_FILE = '../token.pkl'
 
 # Fonction pour générer l'authentification OAuth2
 def generate_oauth2_string(username, access_token):
