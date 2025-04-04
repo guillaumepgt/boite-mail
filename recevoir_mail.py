@@ -31,7 +31,6 @@ def get_full_emails():
 
         # Récupérer le corps du message (si présent)
         body = "Aucun contenu trouvé."
-        print(msg_data)
         if msg_data["snippet"] :
             body = msg_data["snippet"]
 
@@ -44,3 +43,14 @@ def get_full_emails():
         })
 
     return full_email_list
+
+if __name__ == "__main__":
+    emails = get_full_emails()
+    print(emails)
+    print("\n📩 Derniers e-mails reçus :\n")
+    # for email in emails:
+    #     print(f"📨 **De**: {email['Expéditeur']}")
+    #     print(f"🎯 **À**: {email['Destinataire']}")
+    #     print(f"📝 **Sujet**: {email['Sujet']}")
+    #     print(f"📜 **Message**:\n{email['Contenu']}\n")
+    #     print("-" * 50)
