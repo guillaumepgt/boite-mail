@@ -1,4 +1,7 @@
 from tkinter import *
+from boite_mail_Backend.envoyer_mail import *
+from boite_mail_Backend.recevoir_mail import *
+from boite_mail_Backend.recevoir_information import *
 
 fenetre = Tk()
 fenetre.title("Boite Mail")
@@ -66,86 +69,26 @@ def home(fenetres):
         fenetre_boite.destroy()
     elif fenetres == "ecriture" and "fenetre_ecriture" in globals():
         fenetre_ecriture.destroy()
-
-def envoyer_mail():
-    import base64
-    import smtplib
-    from email.mime.text import MIMEText
-
-    SCOPES = ['https://mail.google.com/']
-    CREDENTIALS_FILE = 'token.pkl'
-
-    # Fonction pour générer l'authentification OAuth2
-    def generate_oauth2_string(username, access_token):
-        auth_string = f"user={username}\1auth=Bearer {access_token}\1\1"
-        return base64.b64encode(auth_string.encode("ascii")).decode("ascii")
-
-    # Fonction pour envoyer un e-mail
-    def send_email(subject, body, sender, recipients):
-        creds = connexion()  # Récupérer les credentials
-        access_token = creds.token  # Accéder au token d'accès
-
-        # Générer la chaîne d'authentification
-        auth_string = generate_oauth2_string(sender, access_token)
-
-        # Créer le message
-        msg = MIMEText(body)
-        msg['Subject'] = subject
-        msg['From'] = sender
-        msg['To'] = ", ".join(recipients)
-
-        # Configuration du serveur SMTP
-        try:
-            server = smtplib.SMTP("smtp.gmail.com", 587)
-            server.starttls()  # Démarrer la connexion TLS
-            server.docmd('AUTH', "XOAUTH2 " + auth_string)  # Authentification via OAuth2
-            server.sendmail(sender, recipients, msg.as_string())  # Envoyer le mail
-            server.quit()  # Fermer la connexion
-            print("E-mail envoyé avec succès !")
-        except Exception as e:
-            print(f"Une erreur est survenue : {e}")
-
-    # Exécution du programme principal
-    if __name__ == '__main__':
-        # Définir les informations nécessaires
-        sender = 'mailboite07@gmail.com'
-        recipients = ['mailboite07@gmail.com']
-        subject = ecriture_objet.get("1.0", "end-1c")
-        body = ecriture_mail.get("1.0", "end-1c")
-
-        # Envoyer l'e-mail 
-        send_email(subject, body, sender, recipients)
+    elif fenetres == "label" and "fenetre_label" in globals():
+        fenetre_label.destroy()
 
 
 
-def connexion():
-    SCOPES = ['https://mail.google.com/']
-    CREDENTIALS_FILE = 'token.pkl'
-
-    import os
-    import pickle
-    from google_auth_oauthlib.flow import InstalledAppFlow
-
-    creds = None
-    # Si un token existe déjà
-    if os.path.exists(CREDENTIALS_FILE):
-        with open(CREDENTIALS_FILE, 'rb') as token:
-            creds = pickle.load(token)
-
-    # Si les credentials sont invalides ou expirés
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'client_secret.json', SCOPES)
-            creds = flow.run_local_server(port=5000)
-
-        # Sauvegarde des nouveaux credentials
-        with open(CREDENTIALS_FILE, 'wb') as token:
-            pickle.dump(creds, token)
-
-    return creds
+"""def afficher_mails(mails):
+    for mail in mails:
+        print(f"Expéditeur: {mail['Expéditeur']}")
+        print(f"Destinataire: {mail['Destinataire']}")
+        print(f"Sujet: {mail['Sujet']}")
+        print(f"Contenu: {mail['Contenu']}")
+        print("-" * 40)
+def afficher_mails_avec_icone(mails):
+    for mail in mails:
+        # Afficher l'e-mail avec une icône
+        print(f"📧 Expéditeur: {mail['Expéditeur']}")
+        print(f"✉️ Destinataire: {mail['Destinataire']}")
+        print(f"📝 Sujet: {mail['Sujet']}")
+        print(f"📜 Contenu: {mail['Contenu']}")
+        print("-" * 40)"""
 
 
 
@@ -159,7 +102,7 @@ def parametre(event=None):
     choix = Menu(fenetre, tearoff=0, bg=menu_bg, fg=menu_fg, font=font_style, activebackground=menu_hover, activeforeground="white", relief="raised", borderwidth=3)
     
     # Ajout des options avec des icônes (si tu en as)
-    choix.add_command(label="👤 Connexion", command=connexion)
+    choix.add_command(label="👤 Connexion", command=get_credentials)
     choix.add_command(label="❓ Aide", command=lambda: print("Aide"))
     choix.add_separator()
     choix.add_command(label="❌ Quitter", command=fenetre.quit)
@@ -183,10 +126,10 @@ def boite_de_reception():
     j = 0
 
     for i in range(3):
-        Button(fenetre_boite, text="Personne "+str(i+1+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.1, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+        Button(fenetre_boite, text="Personne "+str(i+1+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=recevoir_mails).place(x=largeur_ecran*0.1, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
         Button(fenetre_boite, text="Personne "+str(i+2+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.4, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
         Button(fenetre_boite, text="Personne "+str(i+3+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.7, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
-        j += 1
+        j += 2
 
 
     recherche_mail = Entry(fenetre_boite, bg="white", fg="black", font="Courier", bd=2, justify=LEFT)
@@ -223,7 +166,7 @@ def ecrire_mail():
     ecriture_objet.insert("1.0", "Ecrire un objet")  # Insère à la première ligne, colonne 0
     ecriture_objet.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.55, width=largeur_ecran*0.8, height=hauteur_ecran*0.03)
 
-    envoyer = Button(fenetre_ecriture, text="Envoyer", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=envoyer_mail)
+    envoyer = Button(fenetre_ecriture, text="Envoyer", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: envoyer_email(ecriture_objet.get("1.0","end-1c"),ecriture_mail.get("1.0","end-1c")))
     envoyer.place(x=largeur_ecran*0.875, y=hauteur_ecran*0.55, width=largeur_ecran*0.1, height=hauteur_ecran*0.4)
         
     # Lier l’événement du clic à la suppression du texte par défaut
@@ -249,13 +192,14 @@ def ecrire_mail():
 
 
 def label():
+    global fenetre_label
     # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
     fenetre_label = Toplevel(fenetre)
     fenetre_label.title("Ecrire un mail")
     fenetre_label.attributes("-fullscreen", True)
     fenetre_label.iconbitmap("logo.ico")
 
-    bouton_home = Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("ecriture")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
+    bouton_home = Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
     bouton_exit = Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
     bouton_creation_label = Button(fenetre_label, text="Création d'un nouvelle catégorie", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
