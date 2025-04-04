@@ -45,11 +45,8 @@ def send_email(subject, body, sender, recipients):
 # Exécution du programme principal
 if __name__ == '__main__':
     # Définir les informations nécessaires
-    sender = 'ouion547@gmail.com'
+    sender = 'mailboite07@gmail.com'
     recipients = ['mailboite07@gmail.com']
     subject = "salo"
-    body = "gourmandiiiiiises heinnn"
-
-    # Envoyer l'e-mail
-    while True:
-        send_email(subject, body, sender, recipients)
+    body = "zabiubfyzayufazb"
+    send_email(subject, body, sender, recipients)
