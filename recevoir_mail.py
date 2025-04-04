@@ -44,13 +44,3 @@ def get_full_emails():
         })
 
     return full_email_list
-
-if __name__ == "__main__":
-    emails = get_full_emails()
-    print("\n📩 Derniers e-mails reçus :\n")
-    for email in emails:
-        print(f"📨 **De**: {email['Expéditeur']}")
-        print(f"🎯 **À**: {email['Destinataire']}")
-        print(f"📝 **Sujet**: {email['Sujet']}")
-        print(f"📜 **Message**:\n{email['Contenu']}\n")
-        print("-" * 50)
