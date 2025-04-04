@@ -9,7 +9,7 @@ from googleapiclient.discovery import build
 
 def recevoir_mails():
     SCOPES = ["https://mail.google.com/"]
-    CREDENTIALS_FILE = "token.pkl"
+    CREDENTIALS_FILE = "../token.pkl"
 
     creds = get_credentials(CREDENTIALS_FILE, SCOPES)
     service = build("gmail", "v1", credentials=creds)
@@ -31,7 +31,6 @@ def recevoir_mails():
 
         # Récupérer le corps du message (si présent)
         body = "Aucun contenu trouvé."
-        print(msg_data)
         if msg_data["snippet"] :
             body = msg_data["snippet"]
 
@@ -42,5 +41,5 @@ def recevoir_mails():
             "Sujet": subject,
             "Contenu": body
         })
-
+    print(full_email_list)
     return full_email_list

@@ -12,7 +12,7 @@ SCOPES = [
     "openid"
 ]
 
-CREDENTIALS_FILE = "token.pkl"
+CREDENTIALS_FILE = "../token.pkl"
 CLIENT_SECRET_FILE = "client_secret.json"
 
 def get_credentials():
