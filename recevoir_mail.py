@@ -39,7 +39,7 @@ def recevoir_email():
             "Contenu": body
         })
 
-    print("✅ Emails récupérés avec succès !\n",full_email_list)
+    print("✅ Emails récupérés avec succès !")
     return full_email_list
     
 
