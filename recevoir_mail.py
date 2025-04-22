@@ -8,10 +8,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
 def get_full_emails():
-    SCOPES = ["https://mail.google.com/"]
-    CREDENTIALS_FILE = "token.pkl"
-
-    creds = get_credentials(CREDENTIALS_FILE, SCOPES)
+    creds = get_credentials()
     service = build("gmail", "v1", credentials=creds)
 
     # Récupérer les 10 derniers messages
@@ -45,12 +42,4 @@ def get_full_emails():
     return full_email_list
 
 if __name__ == "__main__":
-    emails = get_full_emails()
-    print(emails)
-    print("\n📩 Derniers e-mails reçus :\n")
-    # for email in emails:
-    #     print(f"📨 **De**: {email['Expéditeur']}")
-    #     print(f"🎯 **À**: {email['Destinataire']}")
-    #     print(f"📝 **Sujet**: {email['Sujet']}")
-    #     print(f"📜 **Message**:\n{email['Contenu']}\n")
-    #     print("-" * 50)
+    print(get_full_emails())

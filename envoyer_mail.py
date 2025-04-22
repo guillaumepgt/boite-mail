@@ -9,9 +9,6 @@ from email.mime.text import MIMEText
 # from google_auth_oauthlib.flow import InstalledAppFlow
 from get_tokens import *
 
-SCOPES = ['https://mail.google.com/']
-CREDENTIALS_FILE = 'token.pkl'
-
 # Fonction pour générer l'authentification OAuth2
 def generate_oauth2_string(username, access_token):
     auth_string = f"user={username}\1auth=Bearer {access_token}\1\1"
@@ -19,7 +16,7 @@ def generate_oauth2_string(username, access_token):
 
 # Fonction pour envoyer un e-mail
 def send_email(subject, body, sender, recipients):
-    creds = get_credentials(CREDENTIALS_FILE, SCOPES)  # Récupérer les credentials
+    creds = get_credentials()  # Récupérer les credentials
     access_token = creds.token  # Accéder au token d'accès
 
     # Générer la chaîne d'authentification
