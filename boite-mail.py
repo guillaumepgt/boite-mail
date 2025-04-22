@@ -3,6 +3,7 @@ from envoyer_mail import *
 from recevoir_mail import *
 from recevoir_information import *
 from contact import *
+from icone_contacts import *
 
 fenetre = Tk()
 fenetre.title("Boite Mail")
@@ -212,9 +213,9 @@ def boite_de_reception():
             if contact[i]["Nom"] == contact[j]["Nom"]:
                 use = 1
         if use == 0:
-            icone = PhotoImage(file="icones/AB.png")
+            icone = PhotoImage(file=creer_icone_initiales(contact[i]["Nom"], contact[i]["Email"]))
             icone.image = icone
-            Button(fenetre_boite, compound="top", text=contact[i]["Nom"], image= icone,font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: discussion(contact[i]["Email"])).place(x=largeur_ecran*[0.1,0.4,0.7][compteur%3], y=hauteur_ecran*(0.15 + 0.3*(compteur//3)), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+            Button(fenetre_boite, compound="top", text=contact[i]["Nom"], image= icone,font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda email=contact[i]["Email"]: discussion(email)).place(x=largeur_ecran*[0.1,0.4,0.7][compteur%3], y=hauteur_ecran*(0.15 + 0.3*(compteur//3)), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
             compteur += 1
 
 
