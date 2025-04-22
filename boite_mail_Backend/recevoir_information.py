@@ -4,6 +4,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from get_tokens import *
 
 # ✅ Scopes nécessaires pour récupérer les infos utilisateur
 SCOPES = [
@@ -12,27 +13,8 @@ SCOPES = [
     "openid"
 ]
 
-CREDENTIALS_FILE = "../token.pkl"
+CREDENTIALS_FILE = "token.pkl"
 CLIENT_SECRET_FILE = "client_secret.json"
-
-def get_credentials():
-    """ Authentifie l'utilisateur et gère les credentials OAuth2. """
-    creds = None
-    if os.path.exists(CREDENTIALS_FILE):
-        with open(CREDENTIALS_FILE, "rb") as token:
-            creds = pickle.load(token)
-
-    if not creds or not creds.valid or not creds.refresh_token:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(CLIENT_SECRET_FILE, SCOPES)
-            creds = flow.run_local_server(port=5000)
-
-        with open(CREDENTIALS_FILE, "wb") as token:
-            pickle.dump(creds, token)
-
-    return creds
 
 
 def get_user_info():

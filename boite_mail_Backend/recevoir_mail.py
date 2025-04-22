@@ -1,4 +1,4 @@
-from boite_mail_Backend.get_tokens import *
+from get_tokens import *
 import os
 import base64
 import pickle
@@ -7,11 +7,8 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-def recevoir_mails():
-    SCOPES = ["https://mail.google.com/"]
-    CREDENTIALS_FILE = "../token.pkl"
-
-    creds = get_credentials(CREDENTIALS_FILE, SCOPES)
+def get_full_emails():
+    creds = get_credentials()
     service = build("gmail", "v1", credentials=creds)
 
     # Récupérer les 10 derniers messages
@@ -41,5 +38,8 @@ def recevoir_mails():
             "Sujet": subject,
             "Contenu": body
         })
-    print(full_email_list)
+
     return full_email_list
+
+if __name__ == "__main__":
+    print(get_full_emails())

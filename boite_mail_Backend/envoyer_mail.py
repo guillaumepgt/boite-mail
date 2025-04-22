@@ -7,10 +7,7 @@ from email.mime.text import MIMEText
 # from google.auth.transport.requests import Request
 # from google.oauth2.credentials import Credentials
 # from google_auth_oauthlib.flow import InstalledAppFlow
-from boite_mail_Backend.get_tokens import *
-
-SCOPES = ['https://mail.google.com/']
-CREDENTIALS_FILE = '../token.pkl'
+from get_tokens import *
 
 # Fonction pour générer l'authentification OAuth2
 def generate_oauth2_string(username, access_token):
@@ -18,8 +15,8 @@ def generate_oauth2_string(username, access_token):
     return base64.b64encode(auth_string.encode("ascii")).decode("ascii")
 
 # Fonction pour envoyer un e-mail
-def envoyer_email(subject, body, sender='mailboite07@gmail.com', recipients=['mailboite07@gmail.com']):
-    creds = get_credentials(CREDENTIALS_FILE, SCOPES)  # Récupérer les credentials
+def send_email(subject, body, sender, recipients):
+    creds = get_credentials()  # Récupérer les credentials
     access_token = creds.token  # Accéder au token d'accès
 
     # Générer la chaîne d'authentification
@@ -49,4 +46,4 @@ if __name__ == '__main__':
     recipients = ['mailboite07@gmail.com']
     subject = "salo"
     body = "zabiubfyzayufazb"
-    #send_email(subject, body, sender, recipients)
+    send_email(subject, body, sender, recipients)

@@ -18,25 +18,25 @@ hauteur_ecran = fenetre.winfo_screenheight()
 
 
 # Charger les images pour la fenêtre principale
-chemin_image_mail = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\mail.png"
+chemin_image_mail = r"mail.png"
 photo_mail = PhotoImage(file=chemin_image_mail)
-chemin_image_ecrire = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\ecrire.png"
+chemin_image_ecrire = r"ecrire.png"
 photo_ecrire = PhotoImage(file=chemin_image_ecrire)
-chemin_image_label = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\label.png"
+chemin_image_label = r"label.png"
 photo_label = PhotoImage(file=chemin_image_label)
-chemin_image_poubelle = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\poubelle.png"
+chemin_image_poubelle = r"poubelle.png"
 photo_poubelle = PhotoImage(file=chemin_image_poubelle)
-chemin_image_settings = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\settings.png"
+chemin_image_settings = r"settings.png"
 photo_settings = PhotoImage(file=chemin_image_settings)
-chemin_image_profil = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\profil.png"
+chemin_image_profil = r"profil.png"
 photo_profil = PhotoImage(file=chemin_image_profil)
 
 # Charger les images pour les différentes fenêtres
-chemin_image_home = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\home.png"
+chemin_image_home = r"home.png"
 photo_home = PhotoImage(file=chemin_image_home)
-chemin_image_exit = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\exit.png"
+chemin_image_exit = r"exit.png"
 photo_exit = PhotoImage(file=chemin_image_exit)
-chemin_image_line = r"C:\Users\Maxime\Desktop\Cours\Informatique\Année 2\S2\Projet\boite-mail\line.png"
+chemin_image_line = r"line.png"
 photo_line = PhotoImage(file=chemin_image_line)
 
 
