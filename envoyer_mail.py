@@ -15,7 +15,7 @@ def generate_oauth2_string(username, access_token):
     return base64.b64encode(auth_string.encode("ascii")).decode("ascii")
 
 # Fonction pour envoyer un e-mail
-def send_email(subject, body, sender, recipients):
+def envoyer_email(subject, body, sender, recipients):
     creds = get_credentials()  # Récupérer les credentials
     access_token = creds.token  # Accéder au token d'accès
 
@@ -46,4 +46,4 @@ if __name__ == '__main__':
     recipients = ['mailboite07@gmail.com']
     subject = "salo"
     body = "zabiubfyzayufazb"
-    send_email(subject, body, sender, recipients)
+    envoyer_email(subject, body, sender, recipients)

@@ -7,7 +7,7 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
-def get_full_emails():
+def recevoir_email():
     creds = get_credentials()
     service = build("gmail", "v1", credentials=creds)
 
@@ -42,4 +42,4 @@ def get_full_emails():
     return full_email_list
 
 if __name__ == "__main__":
-    print(get_full_emails())
+    print(recevoir_email())
