@@ -25,7 +25,7 @@ def creer_icone_initiales(name, taille=60, dossier="icones"):
     taille_police = int(taille * 0.5)
 
     try:
-        font = ImageFont.truetype("fonts/DejaVuSans-Bold.ttf", taille_police)
+        font = ImageFont.truetype("fonts/Poppins-SemiBold.ttf", taille_police)
     except Exception as e:
         print("❌ ERREUR : Impossible de charger la police personnalisée.")
         print(str(e))
