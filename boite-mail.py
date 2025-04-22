@@ -111,67 +111,72 @@ def discussion(adresse_mail):
     bouton_home = Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("boite")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
     bouton_exit = Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
-    for i in range(len(recevoir_email())):
-        if recevoir_email()[i]["Expéditeur"] == adresse_mail :
-            personne = recevoir_email()[i]
-            expéditeur = personne["Expéditeur"]
-            destinataire = personne["Destinataire"]
-            sujet = personne["Sujet"]
-            contenu = personne["Contenu"]
-            
-
-    
-    
-
-    align = "w" if expéditeur == destinataire else "e"  # Aligner le message à gauche ou droite
-
-    # Créer un Canvas pour dessiner la bulle et l'ombre
-    canvas = Canvas(fenetre_discussion, width=largeur_ecran, height=hauteur_ecran, bg="white", bd=1)
+    canvas = Canvas(fenetre_discussion, bg="white", bd=1)
     canvas.place(x=largeur_ecran * 0.1, y=hauteur_ecran * 0.1, width=largeur_ecran * 0.8, height=hauteur_ecran * 0.8)
 
-    # Taille de la bulle et ses bords
+    y_offset_total = 20  # point de départ des messages
+
+    mails = recevoir_email()
+    liste_mails = []
+    for i in range(len(mails)):
+        if mails[i]["Expéditeur"] == adresse_mail :
+            personne = mails[i]
+            liste_mails.append(personne)
+    print(liste_mails)
+    for mail in liste_mails:
+        expéditeur = mail["Expéditeur"]
+        destinataire = mail["Destinataire"]
+        sujet = mail["Sujet"]
+        contenu = mail["Contenu"]
+
+        # Appeler la fonction pour afficher le message
+        y_offset_total = afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset_total)
+            
+
+def afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset):
+    align = "w" if expéditeur == destinataire else "e"
+
     bulle_width = largeur_ecran * 0.6
     bulle_bords = 20
 
-    # Position initiale de la bulle (dépend de l'alignement à gauche ou à droite)
-    x_offset = 20 if align == "w" else largeur_ecran * 0.8 - bulle_width - 20  # respecte la largeur réelle du canvas
-    message_count = len(canvas.find_all()) // 3  # Supposons 3 objets par message (ombre, bulle, texte)
-    y_offset = 20 + message_count * 120
+    x_offset = 20 if align == "w" else largeur_ecran * 0.8 - bulle_width - 20
 
-    # Calculer la hauteur du texte
     font = ("Courier", 14)
     text = sujet + "\n" + contenu
     text_height = get_text_height(canvas, text, font, bulle_width)
-
-    # Ajuster la hauteur de la bulle
-    bulle_height = text_height + 2 * bulle_bords
+    bulle_height = text_height + 3 * bulle_bords
 
     # Dessiner l'ombre
     rectangle_arrondi(canvas,
-                    x_offset + 10,
-                    y_offset + 10,
-                    x_offset + bulle_width + 10,
-                    y_offset + bulle_height + 10,
-                    radius=15,
-                    fill="gray", outline="gray", width=2)
+                      x_offset + 10,
+                      y_offset + 10,
+                      x_offset + bulle_width + 10,
+                      y_offset + bulle_height + 10,
+                      radius=15,
+                      fill="gray", outline="gray", width=2)
 
     # Dessiner la bulle
     rectangle_arrondi(canvas,
-                    x_offset,
-                    y_offset,
-                    x_offset + bulle_width,
-                    y_offset + bulle_height,
-                    radius=15,
-                    fill="#e1f5fe", outline="black", width=2)
+                      x_offset,
+                      y_offset,
+                      x_offset + bulle_width,
+                      y_offset + bulle_height,
+                      radius=15,
+                      fill="#e1f5fe", outline="black", width=2)
 
-    # Ajouter le texte dans la bulle
+    # Ajouter le texte
     canvas.create_text(x_offset + bulle_bords,
-                    y_offset + bulle_bords,
-                    text=sujet + "\n\n   " + contenu,
-                    font=font,
-                    anchor="nw",
-                    fill="black",
-                    width=bulle_width - 2 * bulle_bords)
+                       y_offset + bulle_bords,
+                       text=sujet + "\n\n   " + contenu,
+                       font=font,
+                       anchor="nw",
+                       fill="black",
+                       width=bulle_width - 2 * bulle_bords)
+
+    # Retourner la nouvelle position Y pour le prochain message
+    return y_offset + bulle_height + 30  # 30 = espace entre deux bulles
+
+
 
 
 
