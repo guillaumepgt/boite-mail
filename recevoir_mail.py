@@ -42,4 +42,4 @@ def recevoir_email():
     return full_email_list
 
 if __name__ == "__main__":
-    print(get_full_emails())
+    print(recevoir_email())

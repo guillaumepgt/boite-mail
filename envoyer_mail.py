@@ -46,4 +46,4 @@ if __name__ == '__main__':
     recipients = ['mailboite07@gmail.com']
     subject = "salo"
     body = "zabiubfyzayufazb"
-    send_email(subject, body, sender, recipients)
+    envoyer_email(subject, body, sender, recipients)
