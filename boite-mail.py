@@ -208,12 +208,8 @@ def boite_de_reception():
         if use == 0:
             icone = PhotoImage(file="icones/AB.png")
             icone.image = icone
-<<<<<<< HEAD
-            Button(fenetre_boite, compound="top", text=contact[i]["Nom"], image= icone,font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=recevoir_email).place(x=largeur_ecran*[0.1,0.4,0.7][i%3], y=hauteur_ecran*(0.15 + 0.3*(i//3)), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
 
-=======
             Button(fenetre_boite, compound="top", text=contact[i]["Nom"], image= icone,font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=discussion).place(x=largeur_ecran*[0.1,0.4,0.7][i%3], y=hauteur_ecran*(0.15 + 0.3*(i//3)), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
->>>>>>> 8507680431e9825da042f8cd544c27dfb0d5984d
 
 
     recherche_mail = Entry(fenetre_boite, bg="white", fg="black", font="Courier", bd=2, justify=LEFT)
