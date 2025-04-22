@@ -22,7 +22,7 @@ def deviner_nom_prenom_depuis_email(email):
     else:
         return parts[0].capitalize(), parts[1].capitalize()
 
-def recevoir_email():
+def recevoir_email2():
     creds = get_credentials()
     service = build("gmail", "v1", credentials=creds)
 
