@@ -101,7 +101,7 @@ def get_text_height(canvas, text, font, width):
     return height
 
 
-def discussion():
+def discussion(adresse_mail):
     global fenetre_discussion
     # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
     fenetre_discussion = Toplevel(fenetre)
@@ -111,12 +111,17 @@ def discussion():
     bouton_home = Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("boite")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
     bouton_exit = Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
-    #Paramètres récupérés pour la discussion
-    personne = recevoir_email()[0]
-    expéditeur = personne["Expéditeur"]
-    destinataire = personne["Destinataire"]
-    sujet = personne["Sujet"]
-    contenu = personne["Contenu"]
+    for i in range(len(recevoir_email())):
+        if recevoir_email()[i]["Expéditeur"] == adresse_mail :
+            personne = recevoir_email()[i]
+            expéditeur = personne["Expéditeur"]
+            destinataire = personne["Destinataire"]
+            sujet = personne["Sujet"]
+            contenu = personne["Contenu"]
+            
+
+    
+    
 
     align = "w" if expéditeur == destinataire else "e"  # Aligner le message à gauche ou droite
 
