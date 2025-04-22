@@ -6,6 +6,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
+from email.utils import parseaddr
 
 def recevoir_email():
     creds = get_credentials()
@@ -22,7 +23,7 @@ def recevoir_email():
         headers = msg_data["payload"]["headers"]
 
         # Extraire l'expéditeur, le destinataire et le sujet
-        sender = next((h["value"] for h in headers if h["name"] == "From"), "Inconnu")
+        sender = parseaddr(next((h["value"] for h in headers if h["name"] == "From"), "Inconnu"))[1]
         recipient = next((h["value"] for h in headers if h["name"] == "To"), "Inconnu")
         subject = next((h["value"] for h in headers if h["name"] == "Subject"), "Sans Sujet")
 
