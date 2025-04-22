@@ -199,7 +199,7 @@ def boite_de_reception():
     fenetre_boite.title("Boite de réception")
     fenetre_boite.attributes("-fullscreen", True)
 
-    contact = recevoir_email()
+    contact = recevoir_email2()
     for i in range(len(contact)):
         use = 0
         for j in range(i):
