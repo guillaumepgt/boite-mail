@@ -202,16 +202,17 @@ def boite_de_reception():
     fenetre_boite.attributes("-fullscreen", True)
 
     contact = recevoir_email2()
+    compteur = 0
     for i in range(len(contact)):
         use = 0
         for j in range(i):
             if contact[i]["Nom"] == contact[j]["Nom"]:
                 use = 1
         if use == 0:
-            print(i)
             icone = PhotoImage(file="icones/AB.png")
             icone.image = icone
-            Button(fenetre_boite, compound="top", text=contact[i]["Nom"], image= icone,font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=discussion).place(x=largeur_ecran*[0.1,0.4,0.7][i%3], y=hauteur_ecran*(0.15 + 0.3*(i//3)), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+            Button(fenetre_boite, compound="top", text=contact[i]["Nom"], image= icone,font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: discussion(contact[i]["Email"])).place(x=largeur_ecran*[0.1,0.4,0.7][compteur%3], y=hauteur_ecran*(0.15 + 0.3*(compteur//3)), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+            compteur += 1
 
 
     recherche_mail = Entry(fenetre_boite, bg="white", fg="black", font="Courier", bd=2, justify=LEFT)

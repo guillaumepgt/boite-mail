@@ -49,10 +49,11 @@ def recevoir_email2():
         body = msg_data.get("snippet", "Aucun contenu trouvé.")
 
         full_email_list.append({
-            "Nom": name if name else f"{first_name} {last_name}".strip()
+            "Nom": name if name else f"{first_name} {last_name}".strip(),
+            "Email": email_address
         })
 
     return full_email_list
 
 if __name__ == "__main__":
-    print("✅ Emails récupérés avec succès !\n", recevoir_email())
+    print("✅ Emails récupérés avec succès !\n", recevoir_email2())
