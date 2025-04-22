@@ -120,7 +120,6 @@ def boite_de_reception():
     fenetre_boite = Toplevel(fenetre)
     fenetre_boite.title("Boite de réception")
     fenetre_boite.attributes("-fullscreen", True)
-    fenetre_boite.iconbitmap("logo.ico")
 
     j = 0
 
@@ -155,7 +154,6 @@ def ecrire_mail():
     fenetre_ecriture = Toplevel(fenetre)
     fenetre_ecriture.title("Ecrire un mail")
     fenetre_ecriture.attributes("-fullscreen", True)
-    fenetre_ecriture.iconbitmap("logo.ico")
 
     ecriture_mail = Text(fenetre_ecriture, bg="white", fg="black", font=("Courier", 14), bd=2)
     ecriture_mail.insert("1.0", "Ecrire un mail")  # Insère à la première ligne, colonne 0
@@ -196,7 +194,6 @@ def label():
     fenetre_label = Toplevel(fenetre)
     fenetre_label.title("Ecrire un mail")
     fenetre_label.attributes("-fullscreen", True)
-    fenetre_label.iconbitmap("logo.ico")
 
     bouton_home = Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
     bouton_exit = Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
