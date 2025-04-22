@@ -10,7 +10,16 @@ def generer_couleur_fond():
     ]
     return random.choice(couleurs)
 
-def creer_icone_initiales(name, taille=60, dossier="icones"):
+def lettres(name):
+    lettre = name[0]
+    for i in range(len(name)):
+        if name[i] == " ":
+            lettre += name[i+1].upper()
+    return lettre
+
+def creer_icone_initiales(name, mail, taille=100, dossier="icones"):
+    if os.path.isfile(f"icones/{mail}.png"):
+        return f"icones/{mail}.png"
     os.makedirs(dossier, exist_ok=True)
 
     couleur_fond = generer_couleur_fond()
@@ -30,9 +39,9 @@ def creer_icone_initiales(name, taille=60, dossier="icones"):
         print("❌ ERREUR : Impossible de charger la police personnalisée.")
         print(str(e))
         return
-
+    lettre = lettres(name)
     # Calculer les dimensions du texte
-    bbox = draw.textbbox((0, 0), name.upper(), font=font)
+    bbox = draw.textbbox((0, 0), lettre.upper(), font=font)
     text_width = bbox[2] - bbox[0]
     text_height = bbox[3] - bbox[1]
 
@@ -40,13 +49,12 @@ def creer_icone_initiales(name, taille=60, dossier="icones"):
     position = ((taille - text_width) / 2, (taille - text_height) / 3)
 
     # Dessiner le texte
-    draw.text(position, name.upper(), font=font, fill="white")
+    draw.text(position, lettre.upper(), font=font, fill="white")
 
-    chemin_fichier = os.path.join(dossier, f"{name}.png")
+    chemin_fichier = os.path.join(dossier, f"{mail}.png")
     image.save(chemin_fichier)
 
-    print(f"✅ Icône créée : {chemin_fichier}")
     return chemin_fichier
 
 if __name__ == "__main__":
-    creer_icone_initiales("AB")
+    creer_icone_initiales("t t", "test")
