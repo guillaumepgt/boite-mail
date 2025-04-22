@@ -112,8 +112,10 @@ def discussion():
     bouton_exit = Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
     #Paramètres récupérés pour la discussion
-    personne = recevoir_email()[0]
+    personne = recevoir_email()
+    print(personne)
     expéditeur = personne["Expéditeur"]
+    print(expéditeur)
     destinataire = personne["Destinataire"]
     sujet = personne["Sujet"]
     contenu = personne["Contenu"]
