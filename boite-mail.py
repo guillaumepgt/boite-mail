@@ -2,6 +2,7 @@ from tkinter import *
 from envoyer_mail import *
 from recevoir_mail import *
 from recevoir_information import *
+from contact import *
 
 fenetre = Tk()
 fenetre.title("Boite Mail")
@@ -189,8 +190,6 @@ def parametre(event=None):
     if bouton_settings:
         choix.post(bouton_settings.winfo_rootx(), bouton_settings.winfo_rooty() + bouton_settings.winfo_height())
 
-
-
 # Fonction pour chaque bouton
 
 def boite_de_reception():
@@ -200,6 +199,7 @@ def boite_de_reception():
     fenetre_boite.title("Boite de réception")
     fenetre_boite.attributes("-fullscreen", True)
 
+<<<<<<< HEAD
     j = 0
 
     for i in range(3):
@@ -207,6 +207,18 @@ def boite_de_reception():
         Button(fenetre_boite, text="Personne "+str(i+2+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.4, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
         Button(fenetre_boite, text="Personne "+str(i+3+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.7, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
         j += 2
+=======
+    contact = recevoir_email()
+    for i in range(len(contact)):
+        use = 0
+        for j in range(i):
+            if contact[i]["Nom"] == contact[j]["Nom"]:
+                use = 1
+        if use == 0:
+            icone = PhotoImage(file="icones/AB.png")
+            icone.image = icone
+            Button(fenetre_boite, compound="top", text=contact[i]["Nom"], image= icone,font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=recevoir_email).place(x=largeur_ecran*[0.1,0.4,0.7][i%3], y=hauteur_ecran*(0.15 + 0.3*(i//3)), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+>>>>>>> 16fb225907cb5588b0fa6a582cb199f1cbad2d11
 
 
     recherche_mail = Entry(fenetre_boite, bg="white", fg="black", font="Courier", bd=2, justify=LEFT)
