@@ -123,7 +123,6 @@ def discussion(adresse_mail):
         if mails[i]["Expéditeur"] == adresse_mail :
             personne = mails[i]
             liste_mails.append(personne)
-    print(liste_mails)
     for mail in liste_mails:
         expéditeur = mail["Expéditeur"]
         destinataire = mail["Destinataire"]
