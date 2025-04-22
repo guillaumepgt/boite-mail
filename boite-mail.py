@@ -226,8 +226,6 @@ def boite_de_reception():
     my_scrollbar = Scrollbar(fenetre_boite, orient=VERTICAL)
     my_scrollbar.pack(side=RIGHT, fill=Y)
 
-
-
 def ecrire_mail():
     global fenetre_ecriture
     global ecriture_mail
