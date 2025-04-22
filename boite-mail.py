@@ -67,12 +67,106 @@ def vider_saisi_text(event, widget):
 def home(fenetres):
     if fenetres == "boite" and "fenetre_boite" in globals():
         fenetre_boite.destroy()
+        fenetre_discussion.destroy()
     elif fenetres == "ecriture" and "fenetre_ecriture" in globals():
         fenetre_ecriture.destroy()
     elif fenetres == "label" and "fenetre_label" in globals():
         fenetre_label.destroy()
 
 
+def rectangle_arrondi(canvas, x1, y1, x2, y2, radius, **kwargs):
+    # Dessiner un rectangle avec des coins arrondis en utilisant des arcs de cercle
+    return canvas.create_polygon(
+        x1 + radius, y1,
+        x2 - radius, y1,
+        x2, y1 + radius,
+        x2, y2 - radius,
+        x2 - radius, y2,
+        x1 + radius, y2,
+        x1, y2 - radius,
+        x1, y1 + radius,
+        fill=kwargs.get('fill', 'white'),
+        outline=kwargs.get('outline', 'black'),
+        width=kwargs.get('width', 1),
+        smooth=True
+    )
+
+# Fonction pour ajuster la hauteur de la bulle en fonction du texte
+def get_text_height(canvas, text, font, width):
+    # Créer un texte temporaire pour mesurer la hauteur
+    text_id = canvas.create_text(0, 0, text=text, font=font, width=width)
+    bbox = canvas.bbox(text_id)  # Récupérer la bounding box du texte
+    height = bbox[3] - bbox[1]  # Calculer la hauteur
+    canvas.delete(text_id)  # Supprimer le texte temporaire
+    return height
+
+
+def discussion():
+    global fenetre_discussion
+    # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
+    fenetre_discussion = Toplevel(fenetre)
+    fenetre_discussion.title("Discuter")
+    fenetre_discussion.attributes("-fullscreen", True)
+    
+    bouton_home = Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("boite")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
+    bouton_exit = Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
+
+    #Paramètres récupérés pour la discussion
+    personne = recevoir_email()[0]
+    expéditeur = personne["Expéditeur"]
+    destinataire = personne["Destinataire"]
+    sujet = personne["Sujet"]
+    contenu = personne["Contenu"]
+
+    align = "w" if expéditeur == destinataire else "e"  # Aligner le message à gauche ou droite
+
+    # Créer un Canvas pour dessiner la bulle et l'ombre
+    canvas = Canvas(fenetre_discussion, width=largeur_ecran, height=hauteur_ecran, bg="white", bd=1)
+    canvas.place(x=largeur_ecran * 0.1, y=hauteur_ecran * 0.1, width=largeur_ecran * 0.8, height=hauteur_ecran * 0.8)
+
+    # Taille de la bulle et ses bords
+    bulle_width = largeur_ecran * 0.6
+    bulle_bords = 20
+
+    # Position initiale de la bulle (dépend de l'alignement à gauche ou à droite)
+    x_offset = 20 if align == "w" else largeur_ecran * 0.8 - bulle_width - 20  # respecte la largeur réelle du canvas
+    message_count = len(canvas.find_all()) // 3  # Supposons 3 objets par message (ombre, bulle, texte)
+    y_offset = 20 + message_count * 120
+
+    # Calculer la hauteur du texte
+    font = ("Courier", 14)
+    text = sujet + "\n" + contenu
+    text_height = get_text_height(canvas, text, font, bulle_width)
+
+    # Ajuster la hauteur de la bulle
+    bulle_height = text_height + 2 * bulle_bords
+
+    # Dessiner l'ombre
+    rectangle_arrondi(canvas,
+                    x_offset + 10,
+                    y_offset + 10,
+                    x_offset + bulle_width + 10,
+                    y_offset + bulle_height + 10,
+                    radius=15,
+                    fill="gray", outline="gray", width=2)
+
+    # Dessiner la bulle
+    rectangle_arrondi(canvas,
+                    x_offset,
+                    y_offset,
+                    x_offset + bulle_width,
+                    y_offset + bulle_height,
+                    radius=15,
+                    fill="#e1f5fe", outline="black", width=2)
+
+    # Ajouter le texte dans la bulle
+    canvas.create_text(x_offset + bulle_bords,
+                    y_offset + bulle_bords,
+                    text=sujet + "\n\n   " + contenu,
+                    font=font,
+                    anchor="nw",
+                    fill="black",
+                    width=bulle_width - 2 * bulle_bords)
 
 
 
@@ -105,6 +199,15 @@ def boite_de_reception():
     fenetre_boite.title("Boite de réception")
     fenetre_boite.attributes("-fullscreen", True)
 
+<<<<<<< HEAD
+    j = 0
+
+    for i in range(3):
+        Button(fenetre_boite, text="Personne "+str(i+1+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=discussion).place(x=largeur_ecran*0.1, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+        Button(fenetre_boite, text="Personne "+str(i+2+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.4, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+        Button(fenetre_boite, text="Personne "+str(i+3+j), font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(x=largeur_ecran*0.7, y=hauteur_ecran*(0.15 + 0.3*i), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+        j += 2
+=======
     contact = recevoir_email()
     for i in range(len(contact)):
         use = 0
@@ -115,6 +218,7 @@ def boite_de_reception():
             icone = PhotoImage(file="icones/AB.png")
             icone.image = icone
             Button(fenetre_boite, compound="top", text=contact[i]["Nom"], image= icone,font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=recevoir_email).place(x=largeur_ecran*[0.1,0.4,0.7][i%3], y=hauteur_ecran*(0.15 + 0.3*(i//3)), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+>>>>>>> 16fb225907cb5588b0fa6a582cb199f1cbad2d11
 
 
     recherche_mail = Entry(fenetre_boite, bg="white", fg="black", font="Courier", bd=2, justify=LEFT)
