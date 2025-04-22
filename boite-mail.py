@@ -73,21 +73,6 @@ def home(fenetres):
 
 
 
-"""def afficher_mails(mails):
-    for mail in mails:
-        print(f"Expéditeur: {mail['Expéditeur']}")
-        print(f"Destinataire: {mail['Destinataire']}")
-        print(f"Sujet: {mail['Sujet']}")
-        print(f"Contenu: {mail['Contenu']}")
-        print("-" * 40)
-def afficher_mails_avec_icone(mails):
-    for mail in mails:
-        # Afficher l'e-mail avec une icône
-        print(f"📧 Expéditeur: {mail['Expéditeur']}")
-        print(f"✉️ Destinataire: {mail['Destinataire']}")
-        print(f"📝 Sujet: {mail['Sujet']}")
-        print(f"📜 Contenu: {mail['Contenu']}")
-        print("-" * 40)"""
 
 
 

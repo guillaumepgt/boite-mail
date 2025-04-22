@@ -39,7 +39,9 @@ def recevoir_email():
             "Contenu": body
         })
 
+    print("✅ Emails récupérés avec succès !\n",full_email_list)
     return full_email_list
+    
 
 if __name__ == "__main__":
     print(recevoir_email())
