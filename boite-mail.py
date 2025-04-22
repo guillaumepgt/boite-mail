@@ -6,7 +6,6 @@ from recevoir_information import *
 fenetre = Tk()
 fenetre.title("Boite Mail")
 fenetre.attributes("-fullscreen", True)  # Active le mode plein écran
-fenetre.iconbitmap("logo.ico")  # Vérifiez que "logo.ico" existe
 
 # Quitter le plein écran avec Échap
 fenetre.bind("<Escape>", lambda event: fenetre.attributes("-fullscreen", False))
