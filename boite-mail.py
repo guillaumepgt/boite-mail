@@ -29,13 +29,10 @@ chemin_image_poubelle = r"poubelle.png"
 photo_poubelle = PhotoImage(file=chemin_image_poubelle)
 chemin_image_settings = r"settings.png"
 photo_settings = PhotoImage(file=chemin_image_settings)
-
-if connecter():
-    chemin_image_profil = download_profil_img("https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c")
-else:
-    chemin_image_profil = r"profil.png"
-
+chemin_image_profil = r"profil.png"
+# chemin_image_profil = r"https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c"
 photo_profil = PhotoImage(file=chemin_image_profil)
+
 # Charger les images pour les différentes fenêtres
 chemin_image_home = r"home.png"
 photo_home = PhotoImage(file=chemin_image_home)
@@ -185,13 +182,6 @@ font_style = ("Arial", 12, "bold")  # Police et taille du menu
 
 def deconnexion():
     os.remove("./token.pkl")
-    os.remove("icones/profil.png")
-    chemin_image_profil = r"profil.png"
-    photo_profil = PhotoImage(file=chemin_image_profil)
-    photo_profil.image = photo_profil
-    fenetre.quit()
-    page_accueil()
-
 
 def parametre(event=None):
     choix = Menu(fenetre, tearoff=0, bg=menu_bg, fg=menu_fg, font=font_style, activebackground=menu_hover, activeforeground="white", relief="raised", borderwidth=3)
@@ -342,29 +332,29 @@ fenetre.config(menu=menubar)"""
 
 # Création des 4 rectangles de menu
 
-def page_accueil():
-    bouton_boite_de_reception = Button(fenetre, text="Boite de réception", image=photo_mail, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=boite_de_reception)
-    bouton_boite_de_reception.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+
+bouton_boite_de_reception = Button(fenetre, text="Boite de réception", image=photo_mail, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=boite_de_reception)
+bouton_boite_de_reception.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-    bouton_ecrire_mail = Button(fenetre, text="Ecrire un mail", image=photo_ecrire, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=ecrire_mail)
-    bouton_ecrire_mail.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+bouton_ecrire_mail = Button(fenetre, text="Ecrire un mail", image=photo_ecrire, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=ecrire_mail)
+bouton_ecrire_mail.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-    bouton_label = Button(fenetre, text="Categories", image=photo_label, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=label)
-    bouton_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+bouton_label = Button(fenetre, text="Categories", image=photo_label, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=label)
+bouton_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-    bouton_corbeille = Button(fenetre, text="Corbeille", image=photo_poubelle, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20)
-    bouton_corbeille.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+bouton_corbeille = Button(fenetre, text="Corbeille", image=photo_poubelle, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20)
+bouton_corbeille.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-    bouton_settings = Button(fenetre, image=photo_profil, relief="flat", command=parametre)
-    bouton_settings.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
+bouton_settings = Button(fenetre, image=photo_profil, relief="flat", command=parametre)
+bouton_settings.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
 
-    bouton_exit = Button(fenetre, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
+bouton_exit = Button(fenetre, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
-page_accueil()
+
 
 
 
