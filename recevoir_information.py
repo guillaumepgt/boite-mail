@@ -30,7 +30,19 @@ def connecter():
         return True
     return False
 
-# 🔥 Exécuter la récupération des infos utilisateur
+def download_profil_img(url):
+    import urllib.request
+    from PIL import Image
+    import io
+    os.makedirs('icones', exist_ok=True)
+    with urllib.request.urlopen(url) as u:
+        raw_data = u.read()
+    image = Image.open(io.BytesIO(raw_data))
+    chemin_sauvegarde = os.path.join('icones', 'profil.png')
+    image.save(chemin_sauvegarde, format="PNG")
+    return chemin_sauvegarde
+
+
 if __name__ == "__main__":
     if connecter():
         user_info = get_user_info()
