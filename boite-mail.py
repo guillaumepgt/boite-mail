@@ -255,9 +255,9 @@ def ecrire_mail():
     ecriture_objet.insert("1.0", "Ecrire un objet")  # Insère à la première ligne, colonne 0
     ecriture_objet.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.55, width=largeur_ecran*0.8, height=hauteur_ecran*0.03)
 
-    sender = "mailboite07@gmail.com"
+    recevoir_info = get_user_info()
     recipients = ['mailboite07@gmail.com']
-    envoyer = Button(fenetre_ecriture, text="Envoyer", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: envoyer_email(ecriture_objet.get("1.0","end-1c"),ecriture_mail.get("1.0","end-1c"), sender, recipients))
+    envoyer = Button(fenetre_ecriture, text="Envoyer", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: envoyer_email(ecriture_objet.get("1.0","end-1c"),ecriture_mail.get("1.0","end-1c"), recevoir_info['email'], recipients))
     envoyer.place(x=largeur_ecran*0.875, y=hauteur_ecran*0.55, width=largeur_ecran*0.1, height=hauteur_ecran*0.4)
         
     # Lier l’événement du clic à la suppression du texte par défaut
