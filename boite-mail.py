@@ -30,6 +30,7 @@ photo_poubelle = PhotoImage(file=chemin_image_poubelle)
 chemin_image_settings = r"settings.png"
 photo_settings = PhotoImage(file=chemin_image_settings)
 chemin_image_profil = r"profil.png"
+# chemin_image_profil = r"https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c"
 photo_profil = PhotoImage(file=chemin_image_profil)
 
 # Charger les images pour les différentes fenêtres
@@ -39,9 +40,6 @@ chemin_image_exit = r"exit.png"
 photo_exit = PhotoImage(file=chemin_image_exit)
 chemin_image_line = r"line.png"
 photo_line = PhotoImage(file=chemin_image_line)
-
-
-
 
 # Empêcher la suppression des images
 photo_mail.image = photo_mail
@@ -268,6 +266,7 @@ def ecrire_mail():
     ecriture_adresse.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.55, width=largeur_ecran*0.8, height=hauteur_ecran*0.03)
 
     recevoir_info = get_user_info()
+    print(recevoir_info)
     envoyer = Button(fenetre_ecriture, text="Envoyer", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: envoyer_email(ecriture_objet.get("1.0","end-1c"),ecriture_mail.get("1.0","end-1c"), recevoir_info["email"], [ecriture_adresse.get("1.0","end-1c")]))
     envoyer.place(x=largeur_ecran*0.875, y=hauteur_ecran*0.55, width=largeur_ecran*0.1, height=hauteur_ecran*0.4)
 
