@@ -174,11 +174,6 @@ def afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset
     # Retourner la nouvelle position Y pour le prochain message
     return y_offset + bulle_height + 30  # 30 = espace entre deux bulles
 
-
-
-
-
-
 # Définition des couleurs et styles
 menu_bg = "lightblue"  # Fond du menu
 menu_fg = "#23272A"  # Texte du menu
@@ -193,16 +188,12 @@ def parametre(event=None):
     if connecter() :
         # Ajout des options avec des icônes (si tu en as)
         choix.add_command(label="👤 Deconnexion", command=deconnexion)
-        choix.add_command(label="⚙️ Paramètres", command=lambda: print("Paramètres"))
-        choix.add_separator()
-        choix.add_command(label="❌ Quitter", command=fenetre.quit)
     
     elif not connecter() :
         choix.add_command(label="👤 Connexion", command=get_credentials)
-        choix.add_command(label="⚙️ Paramètres", command=lambda: print("Paramètres"))
-        choix.add_separator()
-        choix.add_command(label="❌ Quitter", command=fenetre.quit)
-        
+    choix.add_command(label="⚙️ Paramètres", command=lambda: print("Paramètres"))
+    choix.add_separator()
+    choix.add_command(label="❌ Quitter", command=fenetre.quit)
     # Position du menu sous le bouton
     if bouton_settings:
         choix.post(bouton_settings.winfo_rootx(), bouton_settings.winfo_rooty() + bouton_settings.winfo_height())
