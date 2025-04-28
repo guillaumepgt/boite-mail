@@ -187,15 +187,24 @@ menu_fg = "#23272A"  # Texte du menu
 menu_hover = "#7289DA"  # Couleur de survol
 font_style = ("Arial", 12, "bold")  # Police et taille du menu
 
+def deconnexion():
+    os.remove("./token.pkl")
+
 def parametre(event=None):
     choix = Menu(fenetre, tearoff=0, bg=menu_bg, fg=menu_fg, font=font_style, activebackground=menu_hover, activeforeground="white", relief="raised", borderwidth=3)
+    if connecter() :
+        # Ajout des options avec des icônes (si tu en as)
+        choix.add_command(label="👤 Connexion", command=get_credentials)
+        choix.add_command(label="❓ Aide", command=lambda: print("Aide"))
+        choix.add_separator()
+        choix.add_command(label="❌ Quitter", command=fenetre.quit)
     
-    # Ajout des options avec des icônes (si tu en as)
-    choix.add_command(label="👤 Connexion", command=get_credentials)
-    choix.add_command(label="❓ Aide", command=lambda: print("Aide"))
-    choix.add_separator()
-    choix.add_command(label="❌ Quitter", command=fenetre.quit)
-    
+    elif not connecter() :
+        choix.add_command(label="👤 Deconnexion", command=deconnexion)
+        choix.add_command(label="❓ Aide", command=lambda: print("Aide"))
+        choix.add_separator()
+        choix.add_command(label="❌ Quitter", command=fenetre.quit)
+        """choix.add_command(label="⚙️ Paramètres", command=lambda: print("Paramètres"))"""
     # Position du menu sous le bouton
     if bouton_settings:
         choix.post(bouton_settings.winfo_rootx(), bouton_settings.winfo_rooty() + bouton_settings.winfo_height())
