@@ -30,9 +30,12 @@ photo_poubelle = PhotoImage(file=chemin_image_poubelle)
 chemin_image_settings = r"settings.png"
 photo_settings = PhotoImage(file=chemin_image_settings)
 chemin_image_profil = r"profil.png"
-# chemin_image_profil = r"https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c"
-photo_profil = PhotoImage(file=chemin_image_profil)
+if connecter():
+    chemin_image_profil = download_profil_img("https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c")
+else:
+    chemin_image_profil = r"profil.png"
 
+photo_profil = PhotoImage(file=chemin_image_profil)
 # Charger les images pour les différentes fenêtres
 chemin_image_home = r"home.png"
 photo_home = PhotoImage(file=chemin_image_home)
@@ -106,7 +109,7 @@ def discussion(adresse_mail):
     fenetre_discussion = Toplevel(fenetre)
     fenetre_discussion.title("Discuter")
     fenetre_discussion.attributes("-fullscreen", True)
-    
+
     bouton_home = Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("boite")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
     bouton_exit = Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
@@ -129,7 +132,7 @@ def discussion(adresse_mail):
 
         # Appeler la fonction pour afficher le message
         y_offset_total = afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset_total)
-            
+
 
 def afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset):
     align = "w" if expéditeur == destinataire else "e"
@@ -182,6 +185,12 @@ font_style = ("Arial", 12, "bold")  # Police et taille du menu
 
 def deconnexion():
     os.remove("./token.pkl")
+    os.remove("icones/profil.png")
+    chemin_image_profil = r"profil.png"
+    photo_profil = PhotoImage(file=chemin_image_profil)
+    photo_profil.image = photo_profil
+    fenetre.quit()
+    page_accueil()
 
 def parametre(event=None):
     choix = Menu(fenetre, tearoff=0, bg=menu_bg, fg=menu_fg, font=font_style, activebackground=menu_hover, activeforeground="white", relief="raised", borderwidth=3)
