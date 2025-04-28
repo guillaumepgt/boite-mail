@@ -25,10 +25,18 @@ def get_user_info():
     user_info = service.userinfo().get().execute()
     return user_info
 
+def connecter():
+    if os.path.exists(CREDENTIALS_FILE):
+        return True
+    return False
+
 # 🔥 Exécuter la récupération des infos utilisateur
 if __name__ == "__main__":
-    user_info = get_user_info()
-    print("✅ Informations de l'utilisateur connecté :")
-    print(f"📧 Email      : {user_info['email']}")
-    print(f"👤 Nom        : {user_info.get('name', 'Inconnu')}")
-    print(f"🖼️ Photo URL  : {user_info.get('picture', 'Aucune photo disponible')}")
+    if connecter():
+        user_info = get_user_info()
+        print("✅ Informations de l'utilisateur connecté :")
+        print(f"📧 Email      : {user_info['email']}")
+        print(f"👤 Nom        : {user_info.get('name', 'Inconnu')}")
+        print(f"🖼️ Photo URL  : {user_info.get('picture', 'Aucune photo disponible')}")
+    else:
+        print(False)
