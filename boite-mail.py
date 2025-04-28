@@ -116,6 +116,12 @@ def discussion(adresse_mail):
     canvas = Canvas(fenetre_discussion, bg="white", bd=1)
     canvas.place(x=largeur_ecran * 0.1, y=hauteur_ecran * 0.1, width=largeur_ecran * 0.8, height=hauteur_ecran * 0.8)
 
+    # Scrollbar liée au Canvas
+    my_scrollbar = Scrollbar(fenetre_discussion, orient=VERTICAL, command=canvas.yview)
+    my_scrollbar.pack(side=RIGHT, fill=Y)
+
+    canvas.configure(yscrollcommand=my_scrollbar.set)
+
     y_offset_total = 20  # point de départ des messages
 
     mails = recevoir_email()
@@ -132,6 +138,11 @@ def discussion(adresse_mail):
 
         # Appeler la fonction pour afficher le message
         y_offset_total = afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset_total)
+    
+    def _on_mousewheel(event):
+        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    canvas.bind_all("<MouseWheel>", _on_mousewheel)
 
 
 def afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset):
@@ -189,7 +200,7 @@ def deconnexion():
     chemin_image_profil = r"profil.png"
     photo_profil = PhotoImage(file=chemin_image_profil)
     photo_profil.image = photo_profil
-    fenetre.quit()
+    fenetre.destroy()
     page_accueil()
 
 def parametre(event=None):
