@@ -29,13 +29,7 @@ chemin_image_poubelle = r"poubelle.png"
 photo_poubelle = PhotoImage(file=chemin_image_poubelle)
 chemin_image_settings = r"settings.png"
 photo_settings = PhotoImage(file=chemin_image_settings)
-chemin_image_profil = r"profil.png"
-if connecter():
-    chemin_image_profil = download_profil_img("https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c")
-else:
-    chemin_image_profil = r"profil.png"
 
-photo_profil = PhotoImage(file=chemin_image_profil)
 # Charger les images pour les différentes fenêtres
 chemin_image_home = r"home.png"
 photo_home = PhotoImage(file=chemin_image_home)
@@ -53,7 +47,6 @@ photo_home.image = photo_home
 photo_exit.image = photo_exit
 photo_settings.image = photo_settings
 photo_line.image = photo_line
-photo_profil.image = photo_profil
 
 
 # Création des fonctions du programme
@@ -196,11 +189,7 @@ font_style = ("Arial", 12, "bold")  # Police et taille du menu
 
 def deconnexion():
     os.remove("./token.pkl")
-    os.remove("icones/profil.png")
-    chemin_image_profil = r"profil.png"
-    photo_profil = PhotoImage(file=chemin_image_profil)
-    photo_profil.image = photo_profil
-    fenetre.destroy()
+    bouton_settings.config(image=None)
     page_accueil()
 
 def parametre(event=None):
@@ -436,6 +425,15 @@ def page_accueil():
     global bouton_corbeille
     global bouton_settings
     global bouton_exit
+
+    if connecter() :
+        chemin_image_profil = download_profil_img("https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c")
+        photo_profil = PhotoImage(file=chemin_image_profil)
+        photo_profil.image = photo_profil
+    elif not connecter() :
+        chemin_image_profil = r"profil.png"
+        photo_profil = PhotoImage(file=chemin_image_profil)
+        photo_profil.image = photo_profil
 
     bouton_boite_de_reception = Button(fenetre, text="Boite de réception", image=photo_mail, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=lambda: boite_de_reception(1))
     bouton_boite_de_reception.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
