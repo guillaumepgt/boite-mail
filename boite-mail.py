@@ -191,6 +191,7 @@ def parametre(event=None):
     
     elif not connecter() :
         choix.add_command(label="👤 Connexion", command=get_credentials)
+    
     choix.add_command(label="⚙️ Paramètres", command=lambda: print("Paramètres"))
     choix.add_separator()
     choix.add_command(label="❌ Quitter", command=fenetre.quit)
@@ -198,17 +199,36 @@ def parametre(event=None):
     if bouton_settings:
         choix.post(bouton_settings.winfo_rootx(), bouton_settings.winfo_rooty() + bouton_settings.winfo_height())
 
-# Fonction pour chaque bouton
 
 def boite_de_reception():
     global fenetre_boite
-    # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
+    # Création d'une nouvelle fenêtre
     fenetre_boite = Toplevel(fenetre)
     fenetre_boite.title("Boite de réception")
     fenetre_boite.attributes("-fullscreen", True)
 
+    # Canvas pour permettre le scroll
+    canvas = Canvas(fenetre_boite)
+    canvas.pack(side=LEFT, fill=BOTH, expand=True)
+
+    # Scrollbar liée au Canvas
+    my_scrollbar = Scrollbar(fenetre_boite, orient=VERTICAL, command=canvas.yview)
+    my_scrollbar.pack(side=RIGHT, fill=Y)
+
+    canvas.configure(yscrollcommand=my_scrollbar.set)
+
+    # Frame dans le canvas pour contenir tous les boutons
+    frame_boite = Frame(canvas)
+    frame_boite.bind("<Configure>",lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+
+    # Créer une fenêtre dans le canvas
+    canvas_frame = canvas.create_window((0, 0), window=frame_boite, anchor="nw")
+
     contact = recevoir_email2()
     compteur = 0
+
+    frame_boite.config(width=largeur_ecran, height=hauteur_ecran*3)
+
     for i in range(len(contact)):
         use = 0
         for j in range(i):
@@ -217,22 +237,32 @@ def boite_de_reception():
         if use == 0:
             icone = PhotoImage(file=creer_icone_initiales(contact[i]["Nom"], contact[i]["Email"]))
             icone.image = icone
-            Button(fenetre_boite, compound="top", text=contact[i]["Nom"], image= icone,font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda email=contact[i]["Email"]: discussion(email)).place(x=largeur_ecran*[0.1,0.4,0.7][compteur%3], y=hauteur_ecran*(0.15 + 0.3*(compteur//3)), width=largeur_ecran*0.2, height=hauteur_ecran*0.2)
+            Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email)).place(
+                x=largeur_ecran * [0.1, 0.4, 0.7][compteur % 3],
+                y=hauteur_ecran * (0.15 + 0.3 * (compteur // 3)),
+                width=largeur_ecran * 0.2,
+                height=hauteur_ecran * 0.2
+            )
             compteur += 1
-
 
     recherche_mail = Entry(fenetre_boite, bg="white", fg="black", font="Courier", bd=2, justify=LEFT)
     recherche_mail.insert(0, "Recherche des mails")
-    recherche_mail.place(x=largeur_ecran*0.1, y=hauteur_ecran*0.055, width=largeur_ecran*0.3, height=hauteur_ecran*0.05)
+    recherche_mail.place(x=largeur_ecran * 0.1, y=hauteur_ecran * 0.055,width=largeur_ecran * 0.3, height=hauteur_ecran * 0.05)
 
-    # Lier l’événement du clic à la suppression du texte par défaut
     recherche_mail.bind("<FocusIn>", lambda event: vider_saisi_entry(event, recherche_mail))
 
-    bouton_home = Button(fenetre_boite, image=photo_home, relief="flat", command=lambda: home("boite")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
-    bouton_exit = Button(fenetre_boite, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
+    bouton_home = Button(fenetre_boite, image=photo_home, relief="flat", command=lambda: home("boite"))
+    bouton_home.place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
 
-    my_scrollbar = Scrollbar(fenetre_boite, orient=VERTICAL)
-    my_scrollbar.pack(side=RIGHT, fill=Y)
+    bouton_exit = Button(fenetre_boite, image=photo_exit, relief="flat", command=fenetre.quit)
+    bouton_exit.place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
+
+    def _on_mousewheel(event):
+        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+
+    canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
+
 
 def ecrire_mail():
     global fenetre_ecriture
@@ -332,35 +362,43 @@ fenetre.config(menu=menubar)"""
 
 # Création des 4 rectangles de menu
 
+def page_accueil():
 
-bouton_boite_de_reception = Button(fenetre, text="Boite de réception", image=photo_mail, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=boite_de_reception)
-bouton_boite_de_reception.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+    global bouton_boite_de_reception
+    global bouton_ecrire_mail
+    global bouton_label
+    global bouton_corbeille
+    global bouton_settings
+    global bouton_exit
 
-
-bouton_ecrire_mail = Button(fenetre, text="Ecrire un mail", image=photo_ecrire, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=ecrire_mail)
-bouton_ecrire_mail.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
-
-
-bouton_label = Button(fenetre, text="Categories", image=photo_label, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=label)
-bouton_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
-
-
-bouton_corbeille = Button(fenetre, text="Corbeille", image=photo_poubelle, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20)
-bouton_corbeille.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+    bouton_boite_de_reception = Button(fenetre, text="Boite de réception", image=photo_mail, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=boite_de_reception)
+    bouton_boite_de_reception.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-bouton_settings = Button(fenetre, image=photo_profil, relief="flat", command=parametre)
-bouton_settings.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
-
-bouton_exit = Button(fenetre, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
+    bouton_ecrire_mail = Button(fenetre, text="Ecrire un mail", image=photo_ecrire, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=ecrire_mail)
+    bouton_ecrire_mail.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
+    bouton_label = Button(fenetre, text="Categories", image=photo_label, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=label)
+    bouton_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+
+
+    bouton_corbeille = Button(fenetre, text="Corbeille", image=photo_poubelle, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20)
+    bouton_corbeille.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
+
+
+    bouton_settings = Button(fenetre, image=photo_profil, relief="flat", command=parametre)
+    bouton_settings.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
+
+    bouton_exit = Button(fenetre, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
 
 
 
 
 
+
+page_accueil()
 
 
 

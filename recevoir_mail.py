@@ -45,4 +45,4 @@ def recevoir_email():
     
 
 if __name__ == "__main__":
-    print(recevoir_email())
+    print(len(recevoir_email()))
