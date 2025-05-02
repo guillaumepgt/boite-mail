@@ -1,4 +1,3 @@
-import asyncio
 from get_tokens import *
 import os
 import base64
@@ -9,18 +8,17 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from email.utils import parseaddr
 
-async def recevoir_email():
-    loop = asyncio.get_running_loop()
-    creds = await loop.run_in_executor(None, get_credentials)
+def recevoir_email():
+    creds = get_credentials()
     service = build("gmail", "v1", credentials=creds)
 
-    # Récupérer les 10 derniers messages de manière asynchrone
-    results = await loop.run_in_executor(None, service.users().messages().list, "me", {"maxResults": 1000})
+    # Récupérer les 10 derniers messages
+    results = service.users().messages().list(userId="me", maxResults=1000).execute()
     messages = results.get("messages", [])
 
     full_email_list = []
     for msg in messages:
-        msg_data = await loop.run_in_executor(None, service.users().messages().get, "me", msg["id"])
+        msg_data = service.users().messages().get(userId="me", id=msg["id"]).execute()
 
         headers = msg_data["payload"]["headers"]
 
@@ -31,7 +29,7 @@ async def recevoir_email():
 
         # Récupérer le corps du message (si présent)
         body = "Aucun contenu trouvé."
-        if msg_data["snippet"]:
+        if msg_data["snippet"] :
             body = msg_data["snippet"]
 
         # Ajouter l'e-mail complet à la liste
@@ -45,6 +43,6 @@ async def recevoir_email():
     print("✅ Emails récupérés avec succès !")
     return full_email_list
 
+
 if __name__ == "__main__":
-    emails = asyncio.run(recevoir_email())
-    print(len(emails))
+    print(len(recevoir_email()))
