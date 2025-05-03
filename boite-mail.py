@@ -33,8 +33,8 @@ photo_settings = PhotoImage(file=chemin_image_settings)
 chemin_image_profil = r"profil.png"
 if connecter():
     chemin_image_profil = download_profil_img("https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c")
-    enregistrer_mail()
-    # enregistrer_mail(recevoir_email2(), "mail/full_name_list.json")
+    enregistrer_mail(recevoir_email,'mail')
+    enregistrer_mail(recevoir_email2, "full_name_list")
 else:
     chemin_image_profil = r"profil.png"
 
@@ -127,7 +127,7 @@ def discussion(adresse_mail):
 
     y_offset_total = 20  # point de départ des messages
 
-    mails = lire_mail()
+    mails = lire_mail("mail")
     liste_mails = []
     for i in range(len(mails)):
         if mails[i]["Expéditeur"] == adresse_mail :
@@ -247,7 +247,7 @@ def boite_de_reception():
     # Créer une fenêtre dans le canvas
     canvas_frame = canvas.create_window((0, 0), window=frame_boite, anchor="nw")
 
-    contact = recevoir_email2()
+    contact = lire_mail("full_name_list")
     compteur = 0
 
     frame_boite.config(width=largeur_ecran, height=hauteur_ecran*3)

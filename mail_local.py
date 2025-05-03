@@ -3,15 +3,15 @@ import os
 import asyncio
 from recevoir_mail import *
 
-def enregistrer_mail():
-    data = recevoir_email()  # On attend que recevoir_email soit aussi async
+def enregistrer_mail(fonction,chemin):
+    data = fonction()  # On attend que recevoir_email soit aussi async
     os.makedirs('mail', exist_ok=True)
-    with open("mail/mail.json", "w") as f:
+    with open(f"mail/{chemin}.json", "w") as f:
         json.dump(data, f)
 
-def lire_mail():
+def lire_mail(chemin):
     os.makedirs('mail', exist_ok=True)
-    with open("mail/mail.json", "r") as f:
+    with open(f"mail/{chemin}.json", "r") as f:
         data = json.load(f)
     return data
 
