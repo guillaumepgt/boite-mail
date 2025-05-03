@@ -1,4 +1,5 @@
 from tkinter import *
+import asyncio
 from fonction.envoyer_mail import *
 from fonction.recevoir_mail import *
 from fonction.recevoir_information import *
@@ -32,9 +33,8 @@ chemin_image_settings = r"img/settings.png"
 photo_settings = PhotoImage(file=chemin_image_settings)
 chemin_image_profil = r"img/profil.png"
 if connecter():
-    chemin_image_profil = download_profil_img("https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c")
-    enregistrer_mail(recevoir_email,'mail')
-    enregistrer_mail(recevoir_email2, "full_name_list")
+    threading.Thread(target=start_async_loop, daemon=True).start()
+    chemin_image_profil = download_profil_img(get_user_info()["picture"])
 else:
     chemin_image_profil = r"img/profil.png"
 
@@ -200,7 +200,7 @@ font_style = ("Arial", 12, "bold")  # Police et taille du menu
 def deconnexion():
     os.remove("private/token.pkl")
     os.remove("icones/profil.png")
-    chemin_image_profil = r"profil.png"
+    chemin_image_profil = r"img/profil.png"
     photo_profil = PhotoImage(file=chemin_image_profil)
     photo_profil.image = photo_profil
     fenetre.destroy()
@@ -420,10 +420,5 @@ def page_accueil():
 
 
 
-
 page_accueil()
-
-
-
-
 fenetre.mainloop()

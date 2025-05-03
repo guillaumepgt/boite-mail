@@ -54,8 +54,10 @@ def recevoir_email2():
 
     return full_email_list
 
-if __name__ == "__main__":
+try:
+    # Si le module est utilisé dans un projet structuré avec sous-dossiers
+    from fonction.get_tokens import *
+except ImportError:
+    # Si le fichier est lancé directement, en standalone
     from get_tokens import *
     print("✅ Emails récupérés avec succès !\n", recevoir_email2())
-else:
-    from fonction.get_tokens import *

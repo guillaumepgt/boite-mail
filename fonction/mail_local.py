@@ -1,21 +1,37 @@
 import json
 import os
 import asyncio
+import threading
+import queue
 
-def enregistrer_mail(fonction,chemin):
-    data = fonction()  # On attend que recevoir_email soit aussi async
-    os.makedirs('../mail', exist_ok=True)
-    with open(f"mail/{chemin}.json", "w") as f:
-        json.dump(data, f)
+
+async def enregistrer_mail(fonction,chemin):
+    data = fonction()
+    os.makedirs('private/mail', exist_ok=True)
+    # Écriture fichier de manière "bloquante" dans un thread séparé
+    json.dump(data, open(f"private/mail/{chemin}.json", "w"))
 
 def lire_mail(chemin):
-    os.makedirs('../mail', exist_ok=True)
-    with open(f"mail/{chemin}.json", "r") as f:
+    if os.path.exists(f"../private/mail/{chemin}.json"):
+        chemin = f"../private/mail/{chemin}.json"
+    elif os.path.exists(f"private/mail/{chemin}.json"):
+        chemin = f"private/mail/{chemin}.json"
+    with open(chemin, "r") as f:
         data = json.load(f)
     return data
 
+def start_async_loop():
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    loop.run_until_complete(asyncio.gather(
+        enregistrer_mail(recevoir_email, "mail"),
+        enregistrer_mail(recevoir_email2, "full_name_list")
+    ))
+
 if __name__ == '__main__':
     from recevoir_mail import *
-    print(lire_mail())
+    from contact import *
+    print(lire_mail("mail"))
 else:
+    from fonction.contact import *
     from fonction.recevoir_mail import *
