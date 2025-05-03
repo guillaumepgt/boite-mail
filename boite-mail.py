@@ -20,31 +20,31 @@ hauteur_ecran = fenetre.winfo_screenheight()
 
 
 # Charger les images pour la fenêtre principale
-chemin_image_mail = r"mail.png"
+chemin_image_mail = r"img/mail.png"
 photo_mail = PhotoImage(file=chemin_image_mail)
-chemin_image_ecrire = r"ecrire.png"
+chemin_image_ecrire = r"img/ecrire.png"
 photo_ecrire = PhotoImage(file=chemin_image_ecrire)
-chemin_image_label = r"label.png"
+chemin_image_label = r"img/label.png"
 photo_label = PhotoImage(file=chemin_image_label)
-chemin_image_poubelle = r"poubelle.png"
+chemin_image_poubelle = r"img/poubelle.png"
 photo_poubelle = PhotoImage(file=chemin_image_poubelle)
-chemin_image_settings = r"settings.png"
+chemin_image_settings = r"img/settings.png"
 photo_settings = PhotoImage(file=chemin_image_settings)
-chemin_image_profil = r"profil.png"
+chemin_image_profil = r"img/profil.png"
 if connecter():
     chemin_image_profil = download_profil_img("https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c")
     enregistrer_mail(recevoir_email,'mail')
     enregistrer_mail(recevoir_email2, "full_name_list")
 else:
-    chemin_image_profil = r"profil.png"
+    chemin_image_profil = r"img/profil.png"
 
 photo_profil = PhotoImage(file=chemin_image_profil)
 # Charger les images pour les différentes fenêtres
-chemin_image_home = r"home.png"
+chemin_image_home = r"img/home.png"
 photo_home = PhotoImage(file=chemin_image_home)
-chemin_image_exit = r"exit.png"
+chemin_image_exit = r"img/exit.png"
 photo_exit = PhotoImage(file=chemin_image_exit)
-chemin_image_line = r"line.png"
+chemin_image_line = r"img/line.png"
 photo_line = PhotoImage(file=chemin_image_line)
 
 # Empêcher la suppression des images

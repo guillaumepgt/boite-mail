@@ -13,9 +13,6 @@ SCOPES = [
     "openid"
 ]
 
-CREDENTIALS_FILE = "../private/token.pkl"
-CLIENT_SECRET_FILE = "../private/client_secret.json"
-
 
 def get_user_info():
     """ Récupère les informations de l'utilisateur connecté. """
@@ -53,5 +50,9 @@ if __name__ == "__main__":
         print(f"🖼️ Photo URL  : {user_info.get('picture', 'Aucune photo disponible')}")
     else:
         print(False)
+    CREDENTIALS_FILE = "../private/token.pkl"
+    CLIENT_SECRET_FILE = "../private/client_secret.json"
 else:
     from fonction.get_tokens import *
+    CREDENTIALS_FILE = "private/token.pkl"
+    CLIENT_SECRET_FILE = "private/client_secret.json"
