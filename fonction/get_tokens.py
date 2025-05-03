@@ -4,10 +4,13 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
 def get_credentials():
+    if __name__ == "__main__":
+        CREDENTIALS_FILE = "../private/token.pkl"
+    else:
+        CREDENTIALS_FILE = "private/token.pkl"
     SCOPES = ["https://mail.google.com/", "https://www.googleapis.com/auth/userinfo.profile",
               "https://www.googleapis.com/auth/userinfo.email",
               "openid"]
-    CREDENTIALS_FILE = "token.pkl"
     creds = None
     # Si un token existe déjà
     if os.path.exists(CREDENTIALS_FILE):
@@ -20,7 +23,7 @@ def get_credentials():
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(
-                'client_secret.json', SCOPES)
+                '../private/client_secret.json', SCOPES)
             creds = flow.run_local_server(port=5000)
 
         # Sauvegarde des nouveaux credentials

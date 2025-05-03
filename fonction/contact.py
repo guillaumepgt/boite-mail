@@ -1,4 +1,3 @@
-from get_tokens import *
 import os
 import base64
 import pickle
@@ -56,4 +55,7 @@ def recevoir_email2():
     return full_email_list
 
 if __name__ == "__main__":
+    from get_tokens import *
     print("✅ Emails récupérés avec succès !\n", recevoir_email2())
+else:
+    from fonction.get_tokens import *

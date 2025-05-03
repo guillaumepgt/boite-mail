@@ -7,7 +7,7 @@ from email.mime.text import MIMEText
 # from google.auth.transport.requests import Request
 # from google.oauth2.credentials import Credentials
 # from google_auth_oauthlib.flow import InstalledAppFlow
-from get_tokens import *
+
 
 # Fonction pour générer l'authentification OAuth2
 def generate_oauth2_string(username, access_token):
@@ -41,9 +41,12 @@ def envoyer_email(subject, body, sender, recipients):
 
 # Exécution du programme principal
 if __name__ == '__main__':
+    from get_tokens import *
     # Définir les informations nécessaires
     sender = 'mailboite07@gmail.com'
     recipients = ['mailboite07@gmail.com']
     subject = "salo"
     body = "zabiubfyzayufazb"
     envoyer_email(subject, body, sender, recipients)
+else:
+    from fonction.get_tokens import *

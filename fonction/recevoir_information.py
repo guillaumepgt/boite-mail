@@ -4,7 +4,7 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from get_tokens import *
+
 
 # ✅ Scopes nécessaires pour récupérer les infos utilisateur
 SCOPES = [
@@ -13,8 +13,8 @@ SCOPES = [
     "openid"
 ]
 
-CREDENTIALS_FILE = "token.pkl"
-CLIENT_SECRET_FILE = "client_secret.json"
+CREDENTIALS_FILE = "../private/token.pkl"
+CLIENT_SECRET_FILE = "../private/client_secret.json"
 
 
 def get_user_info():
@@ -34,16 +34,17 @@ def download_profil_img(url):
     import urllib.request
     from PIL import Image
     import io
-    os.makedirs('icones', exist_ok=True)
+    os.makedirs('../icones', exist_ok=True)
     with urllib.request.urlopen(url) as u:
         raw_data = u.read()
     image = Image.open(io.BytesIO(raw_data))
-    chemin_sauvegarde = os.path.join('icones', 'profil.png')
+    chemin_sauvegarde = os.path.join('../icones', 'profil.png')
     image.save(chemin_sauvegarde, format="PNG")
     return chemin_sauvegarde
 
 
 if __name__ == "__main__":
+    from get_tokens import *
     if connecter():
         user_info = get_user_info()
         print("✅ Informations de l'utilisateur connecté :")
@@ -52,3 +53,5 @@ if __name__ == "__main__":
         print(f"🖼️ Photo URL  : {user_info.get('picture', 'Aucune photo disponible')}")
     else:
         print(False)
+else:
+    from fonction.get_tokens import *

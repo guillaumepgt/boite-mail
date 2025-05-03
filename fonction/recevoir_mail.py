@@ -1,5 +1,4 @@
 import base64
-from get_tokens import *
 from email.utils import parseaddr
 from googleapiclient.discovery import build
 
@@ -47,4 +46,7 @@ def recevoir_email():
 
 
 if __name__ == "__main__":
+    from get_tokens import *
     print(recevoir_email())
+else:
+    from fonction.get_tokens import *

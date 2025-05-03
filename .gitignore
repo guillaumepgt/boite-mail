@@ -1,5 +1,4 @@
 venv/
-token.pkl
-client_secret.json
+private
 icones
 mail

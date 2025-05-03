@@ -1,10 +1,10 @@
 from tkinter import *
-from envoyer_mail import *
-from recevoir_mail import *
-from recevoir_information import *
-from contact import *
-from icone_contacts import *
-from mail_local import *
+from fonction.envoyer_mail import *
+from fonction.recevoir_mail import *
+from fonction.recevoir_information import *
+from fonction.contact import *
+from fonction.icone_contacts import *
+from fonction.mail_local import *
 
 fenetre = Tk()
 fenetre.title("Boite Mail")
@@ -198,7 +198,7 @@ menu_hover = "#7289DA"  # Couleur de survol
 font_style = ("Arial", 12, "bold")  # Police et taille du menu
 
 def deconnexion():
-    os.remove("./token.pkl")
+    os.remove("private/token.pkl")
     os.remove("icones/profil.png")
     chemin_image_profil = r"profil.png"
     photo_profil = PhotoImage(file=chemin_image_profil)
