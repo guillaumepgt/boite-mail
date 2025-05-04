@@ -15,9 +15,11 @@ fenetre.attributes("-fullscreen", True)  # Active le mode plein écran
 fenetre.bind("<Escape>", lambda event: fenetre.attributes("-fullscreen", False))
 
 
-# Récupération des dimensions de l'écran
-largeur_ecran = fenetre.winfo_screenwidth()
-hauteur_ecran = fenetre.winfo_screenheight()
+# # Récupération des dimensions de l'écran
+# largeur_ecran = fenetre.winfo_screenwidth()
+# hauteur_ecran = fenetre.winfo_screenheight()
+largeur_ecran = 1920
+hauteur_ecran = 1080
 
 
 # Charger les images pour la fenêtre principale
@@ -72,6 +74,7 @@ def vider_saisi_text(event, widget):
 def home(fenetres):
     if fenetres == "boite" and "fenetre_boite" in globals():
         fenetre_boite.destroy()
+    elif fenetres == "discussion" and "fenetre_discussion" in globals():
         fenetre_discussion.destroy()
     elif fenetres == "ecriture" and "fenetre_ecriture" in globals():
         fenetre_ecriture.destroy()
@@ -113,7 +116,7 @@ def discussion(adresse_mail):
     fenetre_discussion.title("Discuter")
     fenetre_discussion.attributes("-fullscreen", True)
 
-    bouton_home = Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("boite")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
+    bouton_home = Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("discussion")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
     bouton_exit = Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
     canvas = Canvas(fenetre_discussion, bg="white", bd=1)
