@@ -26,7 +26,7 @@ def recevoir_email2():
     service = build("gmail", "v1", credentials=creds)
 
     # Récupérer les 10 derniers messages
-    results = service.users().messages().list(userId="me", maxResults=10).execute()
+    results = service.users().messages().list(userId="me", maxResults=1000).execute()
     messages = results.get("messages", [])
 
     full_email_list = []

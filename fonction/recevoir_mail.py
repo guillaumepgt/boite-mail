@@ -7,7 +7,7 @@ def recevoir_email():
     service = build("gmail", "v1", credentials=creds)
 
     # Récupérer les 10 derniers messages
-    results = service.users().messages().list(userId="me", maxResults=100).execute()
+    results = service.users().messages().list(userId="me", maxResults=1000).execute()
     messages = results.get("messages", [])
 
     full_email_list = []
@@ -51,4 +51,5 @@ try:
 except ImportError:
     # Si le fichier est lancé directement, en standalone
     from get_tokens import *
+    print(recevoir_email())
 
