@@ -16,6 +16,8 @@ def lire_mail(chemin):
         chemin = f"../private/mail/{chemin}.json"
     elif os.path.exists(f"private/mail/{chemin}.json"):
         chemin = f"private/mail/{chemin}.json"
+    else:
+        return []
     with open(chemin, "r") as f:
         data = json.load(f)
     return data

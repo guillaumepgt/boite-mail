@@ -1,5 +1,7 @@
+import time
 from tkinter import *
 import asyncio
+import shutil
 from fonction.envoyer_mail import *
 from fonction.recevoir_mail import *
 from fonction.recevoir_information import *
@@ -59,7 +61,7 @@ photo_exit.image = photo_exit
 photo_settings.image = photo_settings
 photo_line.image = photo_line
 photo_profil.image = photo_profil
-
+cache_images = {}
 
 # Création des fonctions du programme
 
@@ -202,7 +204,8 @@ font_style = ("Arial", 12, "bold")  # Police et taille du menu
 
 def deconnexion():
     os.remove("private/token.pkl")
-    os.remove("icones/profil.png")
+    shutil.rmtree("private/icones")
+    shutil.rmtree("private/mail")
     chemin_image_profil = r"img/profil.png"
     photo_profil = PhotoImage(file=chemin_image_profil)
     photo_profil.image = photo_profil
@@ -227,7 +230,7 @@ def parametre(event=None):
 
 
 def boite_de_reception():
-    global fenetre_boite
+    global fenetre_boite, cache_images
     # Création d'une nouvelle fenêtre
     fenetre_boite = Toplevel(fenetre)
     fenetre_boite.title("Boite de réception")
@@ -261,8 +264,9 @@ def boite_de_reception():
             if contact[i]["Nom"] == contact[j]["Nom"]:
                 use = 1
         if use == 0:
-            icone = PhotoImage(file=creer_icone_initiales(contact[i]["Nom"], contact[i]["Email"]))
-            icone.image = icone
+            if contact[i]["Email"] not in cache_images :
+                cache_images = enregistrer_icone_tkinter(contact)
+            icone = cache_images[contact[i]["Email"]]
             Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email)).place(
                 x=largeur_ecran * [0.1, 0.4, 0.7][compteur % 3],
                 y=hauteur_ecran * (0.15 + 0.3 * (compteur // 3)),
@@ -313,7 +317,6 @@ def ecrire_mail():
     ecriture_adresse.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.55, width=largeur_ecran*0.8, height=hauteur_ecran*0.03)
 
     recevoir_info = get_user_info()
-    print(recevoir_info)
     envoyer = Button(fenetre_ecriture, text="Envoyer", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: envoyer_email(ecriture_objet.get("1.0","end-1c"),ecriture_mail.get("1.0","end-1c"), recevoir_info["email"], [ecriture_adresse.get("1.0","end-1c")]))
     envoyer.place(x=largeur_ecran*0.875, y=hauteur_ecran*0.55, width=largeur_ecran*0.1, height=hauteur_ecran*0.4)
 
