@@ -245,7 +245,7 @@ def parametre(event=None):
 
 
 def boite_de_reception(page):
-    global fenetre_boite, cache_images
+    global fenetre_boite, cache_images, canvas
     threading.Thread(target=start_async_loop, daemon=True).start()
     if page == 1 :
         # Création d'une nouvelle fenêtre
@@ -325,10 +325,8 @@ def boite_de_reception(page):
 
     elif page == 2 :
 
-        # Scrollbar liée au Canvas
-        my_scrollbar = Scrollbar(fenetre_ecriture, orient=VERTICAL, command=canvas.yview)
-        my_scrollbar.pack(side=RIGHT, fill=Y)
-
+        canvas.delete("all")  # vide le contenu précédent du canvas
+        canvas.yview_moveto(0) # remettre le canvas en haut
 
         # Frame dans le canvas pour contenir tous les boutons
         frame_boite = Frame(canvas)
@@ -384,11 +382,42 @@ def ecrire_mail():
     global fenetre_ecriture
     global ecriture_mail
     global ecriture_objet
+    global canvas
 
     # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
     fenetre_ecriture = Toplevel(fenetre)
     fenetre_ecriture.title("Ecrire un mail")
     fenetre_ecriture.attributes("-fullscreen", True)
+
+    canvas = Canvas(fenetre_ecriture)
+    canvas.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.2, width=largeur_ecran*0.926, height=hauteur_ecran*0.3)
+
+    # Scrollbar liée au Canvas
+    my_scrollbar = Scrollbar(fenetre_ecriture, orient=VERTICAL, command=canvas.yview)
+    my_scrollbar.pack(side=RIGHT, fill=Y)
+
+    canvas.configure(yscrollcommand=my_scrollbar.set)
+
+    def _on_mousewheel(event):
+        if platform.system() == 'Windows':
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        elif platform.system() == 'Darwin':
+            canvas.yview_scroll(int(-1 * (event.delta)), "units")
+        else:
+            if event.num == 4:
+                canvas.yview_scroll(-1, "units")
+            elif event.num == 5:
+                canvas.yview_scroll(1, "units")
+
+    if platform.system() in ['Windows', 'Darwin']:
+        canvas.unbind_all("<MouseWheel>")
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+    else:
+        canvas.unbind_all("<Button-4>")
+        canvas.unbind_all("<Button-5>")
+        canvas.bind_all("<Button-4>", _on_mousewheel)
+        canvas.bind_all("<Button-5>", _on_mousewheel)
+
 
     ecriture_mail = Text(fenetre_ecriture, bg="white", fg="black", font=("Courier", 14), bd=2)
     ecriture_mail.insert("1.0", "Ecrire un mail")  # Insère à la première ligne, colonne 0
@@ -428,19 +457,24 @@ def ecrire_mail():
 
 
 def ecrire_mail_brouillon():
-    # Frame dans le canvas pour contenir tous les boutons
+    global canvas
+
+    canvas.delete("all")  # vide le contenu précédent du canvas
+    canvas.yview_moveto(0) # remettre le canvas en haut
+
+
+    # Créer un nouveau frame à insérer dans le canvas
     frame_brouillon = Frame(canvas)
-    frame_brouillon.bind("<Configure>",lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+    frame_brouillon.bind("<Configure>", lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+    canvas.create_window((0, 0), window=frame_brouillon, anchor="nw")
 
-    # Créer une fenêtre dans le canvas
-    canvas_frame = canvas.create_window((0, 0), window=frame_brouillon, anchor="nw")
-
+    # Afficher les brouillons
     different_brouillon = lire_mail("brouillon_list")
 
     frame_brouillon.config(width=largeur_ecran, height=hauteur_ecran*3)
-
-    for i in range(len(different_brouillon)):
-        Button(frame_brouillon, text=different_brouillon[i]["Objet"], font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(
+    for i, brouillon in enumerate(different_brouillon):
+        Button(frame_brouillon, text=f"\n{brouillon['Sujet']}\n\n{brouillon['Contenu']}", font=("Arial", 20), bg="lightblue", fg="black",
+               relief="flat", activebackground="white", activeforeground="black", command=modifier_brouillon()).place(
             x=largeur_ecran * [0.1, 0.4, 0.7][i % 3],
             y=hauteur_ecran * (0.3 * (i // 3)),
             width=largeur_ecran * 0.2,
@@ -466,6 +500,8 @@ def ecrire_mail_brouillon():
         canvas.bind_all("<Button-4>", _on_mousewheel)
         canvas.bind_all("<Button-5>", _on_mousewheel)
 
+def modifier_brouillon():
+    pass
 
 def label(page):
     global fenetre_label
