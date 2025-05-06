@@ -39,7 +39,7 @@ def recevoir_corbeille():
         body = get_body(msg_data["payload"])
 
         corbeille.append({
-            "Expéditeur": sender,
+            "Email": sender,
             "Destinataire": recipient,
             "Sujet": subject,
             "Contenu": body

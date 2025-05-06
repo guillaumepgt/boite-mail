@@ -29,7 +29,8 @@ def start_async_loop():
         enregistrer_mail(recevoir_email, "private/mail/", "mail"),
         enregistrer_mail(recevoir_email2, "private/mail/", "full_name_list"),
         enregistrer_mail(recevoir_brouillons, "private/mail/", "brouillon_list"),
-        enregistrer_mail(recevoir_corbeille, "private/mail/", "corbeille_list")
+        enregistrer_mail(recevoir_corbeille, "private/mail/", "corbeille_list"),
+        enregistrer_mail(recevoir_corbeille2, "private/mail/", "full_name_list_corbeille")
     ))
 
 if __name__ == '__main__':
