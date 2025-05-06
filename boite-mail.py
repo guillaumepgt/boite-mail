@@ -201,7 +201,7 @@ font_style = ("Arial", 12, "bold")  # Police et taille du menu
 def deconnexion():
     os.remove("private/token.pkl")
     shutil.rmtree("private/icones")
-    shutil.rmtree("private/mail")
+    os.remove("private/mail/mail.json")
     chemin_image_profil = r"img/profil.png"
     photo_profil = PhotoImage(file=chemin_image_profil)
     photo_profil.image = photo_profil
