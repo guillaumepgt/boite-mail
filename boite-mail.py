@@ -2,13 +2,17 @@ import time
 from tkinter import *
 import asyncio
 import shutil
+import platform
 from fonction.envoyer_mail import *
 from fonction.recevoir_mail import *
 from fonction.recevoir_information import *
 from fonction.contact import *
 from fonction.icone_contacts import *
 from fonction.mail_local import *
-import platform
+
+from fonction.graphique.corbeille import *
+
+
 
 fenetre = Tk()
 fenetre.title("Boite Mail")
@@ -452,7 +456,7 @@ def ecrire_mail():
     bouton_mails_envoyés = Button(fenetre_ecriture, text="Mails envoyés", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
     bouton_mails_envoyés.place(x=largeur_ecran*0.52, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
-    bouton_corbeille = Button(fenetre_ecriture, text="Corbeille", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
+    bouton_corbeille = Button(fenetre_ecriture, text="Corbeille", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: corbeille(2))
     bouton_corbeille.place(x=largeur_ecran*0.72, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
 
@@ -520,12 +524,143 @@ def label(page):
         pass
 
 
-def corbeille():
-    pass
+
+def corbeille(page):
+    global fenetre_boite, cache_images
+    if page == 1 :
+        # Création d'une nouvelle fenêtre
+        fenetre_boite = Toplevel(fenetre)
+        fenetre_boite.title("Corbeille")
+        fenetre_boite.attributes("-fullscreen", True)
+
+        # Canvas pour permettre le scroll
+        canvas = Canvas(fenetre_boite)
+        canvas.pack(side=LEFT, fill=BOTH, expand=True)
+
+        # Scrollbar liée au Canvas
+        my_scrollbar = Scrollbar(fenetre_boite, orient=VERTICAL, command=canvas.yview)
+        my_scrollbar.pack(side=RIGHT, fill=Y)
+
+        canvas.configure(yscrollcommand=my_scrollbar.set)
+
+        # Frame dans le canvas pour contenir tous les boutons
+        frame_boite = Frame(canvas)
+        frame_boite.bind("<Configure>",lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+
+        # Créer une fenêtre dans le canvas
+        canvas_frame = canvas.create_window((0, 0), window=frame_boite, anchor="nw")
+
+        contact = lire_mail("full_name_list_corbeille")
+        print(contact)
+        compteur = 0
+
+        frame_boite.config(width=largeur_ecran, height=hauteur_ecran*3)
+        for i in range(len(contact)):
+            use = 0
+            for j in range(i):
+                if contact[i]["Nom"] == contact[j]["Nom"]:
+                    use = 1
+            if use == 0:
+                if contact[i]["Email"] not in cache_images :
+                    cache_images = enregistrer_icone_tkinter(contact)
+                icone = cache_images[contact[i]["Email"]]
+                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email)).place(
+                    x=largeur_ecran * [0.1, 0.4, 0.7][compteur % 3],
+                    y=hauteur_ecran * (0.15 + 0.3 * (compteur // 3)),
+                    width=largeur_ecran * 0.2,
+                    height=hauteur_ecran * 0.2
+                )
+                compteur += 1
+
+        recherche_mail = Entry(fenetre_boite, bg="white", fg="black", font="Courier", bd=2, justify=LEFT)
+        recherche_mail.insert(0, "Recherche des mails")
+        recherche_mail.place(x=largeur_ecran * 0.1, y=hauteur_ecran * 0.055,width=largeur_ecran * 0.3, height=hauteur_ecran * 0.05)
+
+        recherche_mail.bind("<FocusIn>", lambda event: vider_saisi_entry(event, recherche_mail))
+
+        bouton_home = Button(fenetre_boite, image=photo_home, relief="flat", command=lambda: home("boite"))
+        bouton_home.place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
+
+        bouton_exit = Button(fenetre_boite, image=photo_exit, relief="flat", command=fenetre.quit)
+        bouton_exit.place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
 
 
+        def _on_mousewheel(event):
+            if platform.system() == 'Windows':
+                canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            elif platform.system() == 'Darwin':  # macOS
+                canvas.yview_scroll(int(-1 * (event.delta)), "units")
+            else:  # Linux
+                if event.num == 4:
+                    canvas.yview_scroll(-1, "units")
+                elif event.num == 5:
+                    canvas.yview_scroll(1, "units")
+
+        # Bind selon la plateforme
+        if platform.system() in ['Windows', 'Darwin']:
+            canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        else:  # Linux
+            canvas.bind_all("<Button-4>", _on_mousewheel)
+            canvas.bind_all("<Button-5>", _on_mousewheel)
 
 
+    elif page == 2 :
+        # Canvas pour permettre le scroll
+        canvas = Canvas(fenetre_ecriture)
+        canvas.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.2, width=largeur_ecran*0.926, height=hauteur_ecran*0.3)
+
+        # Scrollbar liée au Canvas
+        my_scrollbar = Scrollbar(fenetre_ecriture, orient=VERTICAL, command=canvas.yview)
+        my_scrollbar.pack(side=RIGHT, fill=Y)
+
+        canvas.configure(yscrollcommand=my_scrollbar.set)
+
+        # Frame dans le canvas pour contenir tous les boutons
+        frame_boite = Frame(canvas)
+        frame_boite.bind("<Configure>",lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+
+        # Créer une fenêtre dans le canvas
+        canvas_frame = canvas.create_window((0, 0), window=frame_boite, anchor="nw")
+
+        contact = lire_mail("full_name_list_corbeille")
+        compteur = 0
+
+        frame_boite.config(width=largeur_ecran, height=hauteur_ecran*3)
+
+        for i in range(len(contact)):
+            use = 0
+            for j in range(i):
+                if contact[i]["Nom"] == contact[j]["Nom"]:
+                    use = 1
+            if use == 0:
+                if contact[i]["Email"] not in cache_images :
+                    cache_images = enregistrer_icone_tkinter(contact)
+                icone = cache_images[contact[i]["Email"]]
+                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email)).place(
+                    x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
+                    y=hauteur_ecran * (0.3 * (compteur // 3)),
+                    width=largeur_ecran * 0.2,
+                    height=hauteur_ecran * 0.2
+                )
+                compteur += 1
+
+        def _on_mousewheel(event):
+            if platform.system() == 'Windows':
+                canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            elif platform.system() == 'Darwin':  # macOS
+                canvas.yview_scroll(int(-1 * (event.delta)), "units")
+            else:  # Linux
+                if event.num == 4:
+                    canvas.yview_scroll(-1, "units")
+                elif event.num == 5:
+                    canvas.yview_scroll(1, "units")
+
+        # Bind selon la plateforme
+        if platform.system() in ['Windows', 'Darwin']:
+            canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        else:  # Linux
+            canvas.bind_all("<Button-4>", _on_mousewheel)
+            canvas.bind_all("<Button-5>", _on_mousewheel)
 
 # Création des 4 rectangles de menu
 
@@ -550,7 +685,7 @@ def page_accueil():
     bouton_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-    bouton_corbeille = Button(fenetre, text="Corbeille", image=photo_poubelle, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20)
+    bouton_corbeille = Button(fenetre, text="Corbeille", image=photo_poubelle, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=lambda: corbeille(1))
     bouton_corbeille.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 

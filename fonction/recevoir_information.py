@@ -37,7 +37,6 @@ def download_profil_img(url):
     image = Image.open(io.BytesIO(raw_data))
     chemin_sauvegarde = os.path.join('private/icones', 'profil.png')
     image.save(chemin_sauvegarde, format="PNG")
-    print(chemin_sauvegarde)
     return chemin_sauvegarde
 
 
