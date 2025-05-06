@@ -35,15 +35,12 @@ chemin_image_poubelle = r"img/poubelle.png"
 photo_poubelle = PhotoImage(file=chemin_image_poubelle)
 chemin_image_settings = r"img/settings.png"
 photo_settings = PhotoImage(file=chemin_image_settings)
-<<<<<<< HEAD
-=======
 chemin_image_profil = r"img/profil.png"
 if connecter():
     threading.Thread(target=start_async_loop, daemon=True).start()
     chemin_image_profil = download_profil_img(get_user_info()["picture"])
 else:
     chemin_image_profil = r"img/profil.png"
->>>>>>> 2c10fb8a38fc268daa389c5b0c1cc9e170b31117
 
 # Charger les images pour les différentes fenêtres
 chemin_image_home = r"img/home.png"
@@ -62,12 +59,8 @@ photo_home.image = photo_home
 photo_exit.image = photo_exit
 photo_settings.image = photo_settings
 photo_line.image = photo_line
-<<<<<<< HEAD
-
-=======
 photo_profil.image = photo_profil
 cache_images = {}
->>>>>>> 2c10fb8a38fc268daa389c5b0c1cc9e170b31117
 
 # Création des fonctions du programme
 
@@ -209,10 +202,6 @@ menu_hover = "#7289DA"  # Couleur de survol
 font_style = ("Arial", 12, "bold")  # Police et taille du menu
 
 def deconnexion():
-<<<<<<< HEAD
-    os.remove("./token.pkl")
-    bouton_settings.config(image=None)
-=======
     os.remove("private/token.pkl")
     shutil.rmtree("private/icones")
     shutil.rmtree("private/mail")
@@ -220,7 +209,6 @@ def deconnexion():
     photo_profil = PhotoImage(file=chemin_image_profil)
     photo_profil.image = photo_profil
     fenetre.destroy()
->>>>>>> 2c10fb8a38fc268daa389c5b0c1cc9e170b31117
     page_accueil()
 
 def parametre(event=None):
