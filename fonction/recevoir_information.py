@@ -31,12 +31,13 @@ def download_profil_img(url):
     import urllib.request
     from PIL import Image
     import io
-    os.makedirs('../private/icones', exist_ok=True)
+    os.makedirs('private/icones', exist_ok=True)
     with urllib.request.urlopen(url) as u:
         raw_data = u.read()
     image = Image.open(io.BytesIO(raw_data))
-    chemin_sauvegarde = os.path.join('../private/icones', 'profil.png')
+    chemin_sauvegarde = os.path.join('private/icones', 'profil.png')
     image.save(chemin_sauvegarde, format="PNG")
+    print(chemin_sauvegarde)
     return chemin_sauvegarde
 
 
