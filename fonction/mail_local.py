@@ -34,7 +34,9 @@ def start_async_loop():
 if __name__ == '__main__':
     from recevoir_mail import *
     from contact import *
+    from brouillon import *
     print(lire_mail("mail"))
 else:
     from fonction.contact import *
     from fonction.recevoir_mail import *
+    from fonction.brouillon import *

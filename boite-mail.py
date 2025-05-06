@@ -9,7 +9,6 @@ from fonction.contact import *
 from fonction.icone_contacts import *
 from fonction.mail_local import *
 import platform
-from fonction.brouillon import *
 
 fenetre = Tk()
 fenetre.title("Boite Mail")
