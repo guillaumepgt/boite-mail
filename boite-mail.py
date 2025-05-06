@@ -385,19 +385,26 @@ def ecrire_mail():
     bouton_corbeille.place(x=largeur_ecran*0.72, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
 
+def ecrire_mail_brouillon():
 
-def label():
+    pass
+
+
+def label(page):
     global fenetre_label
-    # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
-    fenetre_label = Toplevel(fenetre)
-    fenetre_label.title("Ecrire un mail")
-    fenetre_label.attributes("-fullscreen", True)
+    if page == 1 :
+        # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
+        fenetre_label = Toplevel(fenetre)
+        fenetre_label.title("Ecrire un mail")
+        fenetre_label.attributes("-fullscreen", True)
 
-    bouton_home = Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
-    bouton_exit = Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
+        bouton_home = Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
+        bouton_exit = Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
-    bouton_creation_label = Button(fenetre_label, text="Création d'un nouvelle catégorie", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
-    bouton_creation_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.05, width=largeur_ecran*0.6, height=hauteur_ecran*0.065)
+        bouton_creation_label = Button(fenetre_label, text="Création d'un nouvelle catégorie", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
+        bouton_creation_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.05, width=largeur_ecran*0.6, height=hauteur_ecran*0.065)
+    elif page == 2 :
+        pass
 
 
 def corbeille():
