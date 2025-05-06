@@ -687,7 +687,6 @@ def corbeille(page):
         contact = lire_mail("full_name_list_corbeille")
         compteur = 0
 
-        frame_boite.config(width=largeur_ecran, height=hauteur_ecran*3)
 
         for i in range(len(contact)):
             use = 0
