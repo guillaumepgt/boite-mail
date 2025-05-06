@@ -9,6 +9,7 @@ from fonction.contact import *
 from fonction.icone_contacts import *
 from fonction.mail_local import *
 import platform
+from fonction.brouillon import *
 
 fenetre = Tk()
 fenetre.title("Boite Mail")
@@ -432,8 +433,49 @@ def ecrire_mail():
 
 
 def ecrire_mail_brouillon():
+    # Canvas pour permettre le scroll
+    canvas = Canvas(fenetre_ecriture)
+    canvas.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.2, width=largeur_ecran*0.926, height=hauteur_ecran*0.3)
+
+    # Scrollbar liée au Canvas
+    my_scrollbar = Scrollbar(fenetre_ecriture, orient=VERTICAL, command=canvas.yview)
+    my_scrollbar.pack(side=RIGHT, fill=Y)
+
+    canvas.configure(yscrollcommand=my_scrollbar.set)
+
+    # Frame dans le canvas pour contenir tous les boutons
+    frame_brouillon = Frame(canvas)
+    frame_brouillon.bind("<Configure>",lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+
+    # Créer une fenêtre dans le canvas
+    canvas_frame = canvas.create_window((0, 0), window=frame_brouillon, anchor="nw")
+
+    different_brouillon = recevoir_brouillons()
     
-    pass
+
+    frame_brouillon.config(width=largeur_ecran, height=hauteur_ecran*3)
+
+    for i in range(len(different_brouillon)):
+        pass
+        
+
+    def _on_mousewheel(event):
+        if platform.system() == 'Windows':
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        elif platform.system() == 'Darwin':  # macOS
+            canvas.yview_scroll(int(-1 * (event.delta)), "units")
+        else:  # Linux
+            if event.num == 4:
+                canvas.yview_scroll(-1, "units")
+            elif event.num == 5:
+                canvas.yview_scroll(1, "units")
+
+    # Bind selon la plateforme
+    if platform.system() in ['Windows', 'Darwin']:
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+    else:  # Linux
+        canvas.bind_all("<Button-4>", _on_mousewheel)
+        canvas.bind_all("<Button-5>", _on_mousewheel)
 
 
 def label(page):
