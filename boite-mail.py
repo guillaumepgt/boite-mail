@@ -17,11 +17,9 @@ fenetre.attributes("-fullscreen", True)  # Active le mode plein écran
 fenetre.bind("<Escape>", lambda event: fenetre.attributes("-fullscreen", False))
 
 
-# # Récupération des dimensions de l'écran
-# largeur_ecran = fenetre.winfo_screenwidth()
-# hauteur_ecran = fenetre.winfo_screenheight()
-largeur_ecran = 1920
-hauteur_ecran = 1080
+# Récupération des dimensions de l'écran
+largeur_ecran = fenetre.winfo_screenwidth()
+hauteur_ecran = fenetre.winfo_screenheight()
 
 
 # Charger les images pour la fenêtre principale
