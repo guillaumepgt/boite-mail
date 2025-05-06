@@ -143,6 +143,10 @@ def discussion(adresse_mail):
         # Appeler la fonction pour afficher le message
         y_offset_total = afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset_total)
 
+    canvas.configure(scrollregion=(0, 0, largeur_ecran * 0.8, y_offset_total))
+    canvas.update_idletasks()
+    canvas.yview_moveto(1.0)
+
     def _on_mousewheel(event):
         canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
@@ -373,7 +377,7 @@ def ecrire_mail():
     bouton_boite_de_reception = Button(fenetre_ecriture, text="Boite de réception", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: boite_de_reception(2))
     bouton_boite_de_reception.place(x=largeur_ecran*0.12, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
-    bouton_brouillon = Button(fenetre_ecriture, text="Brouillon", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
+    bouton_brouillon = Button(fenetre_ecriture, text="Brouillon", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command =lambda: ecrire_mail_brouillon())
     bouton_brouillon.place(x=largeur_ecran*0.32, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
     bouton_mails_envoyés = Button(fenetre_ecriture, text="Mails envoyés", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
@@ -409,31 +413,6 @@ def corbeille():
     pass
 
 
-
-"""def menu():
-    pass
-
-
-menubar = Menu(fenetre)
-
-menu1 = Menu(menubar, tearoff=0)
-menu1.add_command(label="Créer", command=menu)
-menu1.add_command(label="Editer", command=menu)
-menu1.add_separator()
-menu1.add_command(label="Quitter", command=fenetre.quit)
-menubar.add_cascade(label="Fichier", menu=menu1)
-
-menu2 = Menu(menubar, tearoff=0)
-menu2.add_command(label="Couper", command=menu)
-menu2.add_command(label="Copier", command=menu)
-menu2.add_command(label="Coller", command=menu)
-menubar.add_cascade(label="Editer", menu=menu2)
-
-menu3 = Menu(menubar, tearoff=0)
-menu3.add_command(label="A propos", command=menu)
-menubar.add_cascade(label="Aide", menu=menu3)
-
-fenetre.config(menu=menubar)"""
 
 
 
