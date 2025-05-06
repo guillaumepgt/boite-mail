@@ -119,8 +119,10 @@ def discussion(adresse_mail):
     fenetre_discussion.title("Discuter")
     fenetre_discussion.attributes("-fullscreen", True)
 
-    bouton_home = Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("discussion")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
-    bouton_exit = Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
+    Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("discussion")).place(
+        x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
+    Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95,
+                                                                                            y=hauteur_ecran * 0.05)
 
     canvas = Canvas(fenetre_discussion, bg="white", bd=1)
     canvas.place(x=largeur_ecran * 0.1, y=hauteur_ecran * 0.1, width=largeur_ecran * 0.8, height=hauteur_ecran * 0.8)
@@ -140,13 +142,13 @@ def discussion(adresse_mail):
             personne = mails[i]
             liste_mails.append(personne)
     for mail in liste_mails:
-        expéditeur = mail["Expéditeur"]
+        expediteur = mail["Expéditeur"]
         destinataire = mail["Destinataire"]
         sujet = mail["Sujet"]
         contenu = mail["Contenu"]
 
         # Appeler la fonction pour afficher le message
-        y_offset_total = afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset_total)
+        y_offset_total = afficher_message(canvas, expediteur, destinataire, sujet, contenu, y_offset_total)
 
     canvas.configure(scrollregion=(0, 0, largeur_ecran * 0.8, y_offset_total))
     canvas.update_idletasks()
@@ -158,7 +160,7 @@ def discussion(adresse_mail):
         if platform.system() == 'Windows':
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         elif platform.system() == 'Darwin':  # macOS
-            canvas.yview_scroll(int(-1 * (event.delta)), "units")
+            canvas.yview_scroll(int(-1 * event.delta), "units")
         else:  # Linux
             if event.num == 4:
                 canvas.yview_scroll(-1, "units")
@@ -173,8 +175,8 @@ def discussion(adresse_mail):
         canvas.bind_all("<Button-5>", _on_mousewheel)
 
 
-def afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset):
-    align = "e" if expéditeur == destinataire else "w"
+def afficher_message(canvas, expediteur, destinataire, sujet, contenu, y_offset):
+    align = "e" if expediteur == destinataire else "w"
 
     bulle_width = largeur_ecran * 0.6
     bulle_bords = 20
@@ -312,7 +314,7 @@ def boite_de_reception(page):
             if platform.system() == 'Windows':
                 canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
             elif platform.system() == 'Darwin':  # macOS
-                canvas.yview_scroll(int(-1 * (event.delta)), "units")
+                canvas.yview_scroll(int(-1 * event.delta), "units")
             else:  # Linux
                 if event.num == 4:
                     canvas.yview_scroll(-1, "units")
@@ -365,7 +367,7 @@ def boite_de_reception(page):
             if platform.system() == 'Windows':
                 canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
             elif platform.system() == 'Darwin':  # macOS
-                canvas.yview_scroll(int(-1 * (event.delta)), "units")
+                canvas.yview_scroll(int(-1 * event.delta), "units")
             else:  # Linux
                 if event.num == 4:
                     canvas.yview_scroll(-1, "units")
@@ -406,7 +408,7 @@ def ecrire_mail():
         if platform.system() == 'Windows':
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         elif platform.system() == 'Darwin':
-            canvas.yview_scroll(int(-1 * (event.delta)), "units")
+            canvas.yview_scroll(int(-1 * event.delta), "units")
         else:
             if event.num == 4:
                 canvas.yview_scroll(-1, "units")
@@ -444,8 +446,9 @@ def ecrire_mail():
     ecriture_adresse.bind("<FocusIn>", lambda event: vider_saisi_text(event, ecriture_adresse))
 
     Label(fenetre_ecriture, image=photo_line, relief="flat").place(x=largeur_ecran*0.05, y=hauteur_ecran*0.03, width=largeur_ecran*0.1, height=hauteur_ecran*0.1)
-    bouton_home = Button(fenetre_ecriture, image=photo_home, relief="flat", command=lambda: home("ecriture")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
-    bouton_exit = Button(fenetre_ecriture, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
+    Button(fenetre_ecriture, image=photo_home, relief="flat", command=lambda: home("ecriture")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
+    Button(fenetre_ecriture, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95,
+                                                                                          y=hauteur_ecran * 0.05)
 
     bouton_boite_de_reception = Button(fenetre_ecriture, text="Boite de réception", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: boite_de_reception(2))
     bouton_boite_de_reception.place(x=largeur_ecran*0.12, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
@@ -453,8 +456,8 @@ def ecrire_mail():
     bouton_brouillon = Button(fenetre_ecriture, text="Brouillon", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command =lambda: ecrire_mail_brouillon())
     bouton_brouillon.place(x=largeur_ecran*0.32, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
-    bouton_mails_envoyés = Button(fenetre_ecriture, text="Mails envoyés", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
-    bouton_mails_envoyés.place(x=largeur_ecran*0.52, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
+    bouton_mails_envoyes = Button(fenetre_ecriture, text="Mails envoyés", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
+    bouton_mails_envoyes.place(x=largeur_ecran*0.52, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
     bouton_corbeille = Button(fenetre_ecriture, text="Corbeille", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: corbeille(2))
     bouton_corbeille.place(x=largeur_ecran*0.72, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
@@ -497,7 +500,7 @@ def ecrire_mail_brouillon():
         if platform.system() == 'Windows':
             canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
         elif platform.system() == 'Darwin':  # macOS
-            canvas.yview_scroll(int(-1 * (event.delta)), "units")
+            canvas.yview_scroll(int(-1 * event.delta), "units")
         else:  # Linux
             if event.num == 4:
                 canvas.yview_scroll(-1, "units")
@@ -522,8 +525,10 @@ def label(page):
         fenetre_label.title("Ecrire un mail")
         fenetre_label.attributes("-fullscreen", True)
 
-        bouton_home = Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
-        bouton_exit = Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
+        Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(
+            x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
+        Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95,
+                                                                                           y=hauteur_ecran * 0.05)
 
         bouton_creation_label = Button(fenetre_label, text="Création d'un nouvelle catégorie", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
         bouton_creation_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.05, width=largeur_ecran*0.6, height=hauteur_ecran*0.065)
@@ -595,7 +600,7 @@ def corbeille(page):
             if platform.system() == 'Windows':
                 canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
             elif platform.system() == 'Darwin':  # macOS
-                canvas.yview_scroll(int(-1 * (event.delta)), "units")
+                canvas.yview_scroll(int(-1 * event.delta), "units")
             else:  # Linux
                 if event.num == 4:
                     canvas.yview_scroll(-1, "units")
@@ -648,7 +653,7 @@ def corbeille(page):
             if platform.system() == 'Windows':
                 canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
             elif platform.system() == 'Darwin':  # macOS
-                canvas.yview_scroll(int(-1 * (event.delta)), "units")
+                canvas.yview_scroll(int(-1 * event.delta), "units")
             else:  # Linux
                 if event.num == 4:
                     canvas.yview_scroll(-1, "units")
@@ -691,8 +696,7 @@ def page_accueil():
 
     bouton_settings = Button(fenetre, image=photo_profil, relief="flat", command=parametre)
     bouton_settings.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
-
-    bouton_exit = Button(fenetre, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
+    Button(fenetre, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
 
 
