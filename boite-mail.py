@@ -472,17 +472,25 @@ def ecrire_mail_brouillon():
     frame_brouillon.bind("<Configure>", lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
     canvas.create_window((0, 0), window=frame_brouillon, anchor="nw")
 
+    compteur = 0
+
     # Afficher les brouillons
     different_brouillon = lire_mail("brouillon_list")
+    frame_brouillon.config(width=largeur_ecran, height=hauteur_ecran * 3)
 
     for i, brouillon in enumerate(different_brouillon):
-        Button(frame_brouillon, text=f"\n{brouillon['Sujet']}\n\n{brouillon['Contenu']}", font=("Arial", 20), bg="lightblue", fg="black",
+        sujet = brouillon["Sujet"]
+        aperçu_sujet = sujet[:10] + "..." if len(sujet) > 10 else sujet
+        contenu = brouillon["Contenu"]
+        aperçu_contenu = contenu[:10] + "..." if len(contenu) > 10 else contenu
+        Button(frame_brouillon, text=f"\n{aperçu_sujet}\n\n{aperçu_contenu}", font=("Arial", 20), bg="lightblue", fg="black",
                relief="flat", activebackground="white", activeforeground="black", command=modifier_brouillon()).place(
-            x=largeur_ecran * [0.1, 0.4, 0.7][i % 3],
-            y=hauteur_ecran * (0.3 * (i // 3)),
-            width=largeur_ecran * 0.2,
-            height=hauteur_ecran * 0.2
+                x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
+                y=hauteur_ecran * (0.3 * (compteur // 3)),
+                width=largeur_ecran * 0.2,
+                height=hauteur_ecran * 0.2
         )
+        compteur += 1
         
 
     def _on_mousewheel(event):
@@ -603,6 +611,9 @@ def corbeille(page):
 
 
     elif page == 2 :
+
+        canvas.delete("all")  # vide le contenu précédent du canvas
+        canvas.yview_moveto(0) # remettre le canvas en haut
 
         # Frame dans le canvas pour contenir tous les boutons
         frame_boite = Frame(canvas)
