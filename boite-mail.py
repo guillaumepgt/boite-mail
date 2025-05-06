@@ -16,12 +16,6 @@ fenetre.attributes("-fullscreen", True)  # Active le mode plein écran
 # Quitter le plein écran avec Échap
 fenetre.bind("<Escape>", lambda event: fenetre.attributes("-fullscreen", False))
 
-
-<<<<<<< HEAD
-# Récupération des dimensions de l'écran
-=======
-# # Récupération des dimensions de l'écran
->>>>>>> 47fcc94fcf24a8bf3be83b22ecd962311ba5fc63
 largeur_ecran = fenetre.winfo_screenwidth()
 hauteur_ecran = fenetre.winfo_screenheight()
 
