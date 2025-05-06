@@ -71,7 +71,9 @@ def vider_saisi_entry(event, entry):
         entry.delete(0, END)
 
 def vider_saisi_text(event, widget):
-    widget.delete("1.0", END)
+    contenu = widget.get("1.0", "end-1c").strip()
+    if contenu in ["Ecrire un mail", "Ecrire un objet", "Ecrire une adresse mail"]:
+        widget.delete("1.0", "end")
 
 
 def home(fenetres):
@@ -385,10 +387,7 @@ def boite_de_reception(page):
 
 
 def ecrire_mail():
-    global fenetre_ecriture
-    global ecriture_mail
-    global ecriture_objet
-    global canvas
+    global fenetre_ecriture, ecriture_mail, ecriture_objet, canvas, brouillon
 
     # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
     fenetre_ecriture = Toplevel(fenetre)
@@ -464,7 +463,7 @@ def ecrire_mail():
 
 
 def ecrire_mail_brouillon():
-    global canvas
+    global canvas, brouillon
 
     canvas.delete("all")  # vide le contenu précédent du canvas
     canvas.yview_moveto(0) # remettre le canvas en haut
@@ -487,7 +486,7 @@ def ecrire_mail_brouillon():
         contenu = brouillon["Contenu"]
         aperçu_contenu = contenu[:10] + "..." if len(contenu) > 10 else contenu
         Button(frame_brouillon, text=f"\n{aperçu_sujet}\n\n{aperçu_contenu}", font=("Arial", 20), bg="lightblue", fg="black",
-               relief="flat", activebackground="white", activeforeground="black", command=modifier_brouillon()).place(
+               relief="flat", activebackground="white", activeforeground="black", command=lambda b=brouillon: modifier_brouillon(b)).place(
                 x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
                 y=hauteur_ecran * (0.3 * (compteur // 3)),
                 width=largeur_ecran * 0.2,
@@ -514,8 +513,19 @@ def ecrire_mail_brouillon():
         canvas.bind_all("<Button-4>", _on_mousewheel)
         canvas.bind_all("<Button-5>", _on_mousewheel)
 
-def modifier_brouillon():
-    pass
+def modifier_brouillon(brouillon):
+    ecriture_objet.delete("1.0", "end")
+    ecriture_mail.delete("1.0", "end")
+     # Remplir l'objet si le champ est encore vide ou inchangé
+    if ecriture_objet.get("1.0", "end-1c").strip() in ["", "Ecrire un objet"]:
+        ecriture_objet.delete("1.0", "end")
+        ecriture_objet.insert("1.0", brouillon["Sujet"])
+
+    # Remplir le contenu si le champ est encore vide ou inchangé
+    if ecriture_mail.get("1.0", "end-1c").strip() in ["", "Ecrire un mail"]:
+        ecriture_mail.delete("1.0", "end")
+        ecriture_mail.insert("1.0", brouillon["Contenu"])
+
 
 def label(page):
     global fenetre_label
@@ -525,10 +535,8 @@ def label(page):
         fenetre_label.title("Ecrire un mail")
         fenetre_label.attributes("-fullscreen", True)
 
-        Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(
-            x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
-        Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95,
-                                                                                           y=hauteur_ecran * 0.05)
+        Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
+        Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
 
         bouton_creation_label = Button(fenetre_label, text="Création d'un nouvelle catégorie", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
         bouton_creation_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.05, width=largeur_ecran*0.6, height=hauteur_ecran*0.065)
