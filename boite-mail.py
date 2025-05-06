@@ -150,7 +150,7 @@ def discussion(adresse_mail):
 
 
 def afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset):
-    align = "w" if expéditeur == destinataire else "e"
+    align = "e" if expéditeur == destinataire else "w"
 
     bulle_width = largeur_ecran * 0.6
     bulle_bords = 20
