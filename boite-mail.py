@@ -432,7 +432,7 @@ def ecrire_mail():
 
 
 def ecrire_mail_brouillon():
-
+    
     pass
 
 
