@@ -2,6 +2,17 @@ import base64
 from email.utils import parseaddr
 from googleapiclient.discovery import build
 
+def mettre_a_la_corbeille(message_id):
+    creds = get_credentials()
+    service = build("gmail", "v1", credentials=creds)
+
+    try:
+        service.users().messages().trash(userId="me", id=message_id).execute()
+        print(f"🗑️ Message {message_id} déplacé vers la corbeille.")
+    except Exception as e:
+        print(f"❌ Erreur lors de la suppression du message {message_id} : {e}")
+
+
 def recevoir_corbeille():
     creds = get_credentials()
     service = build("gmail", "v1", credentials=creds)

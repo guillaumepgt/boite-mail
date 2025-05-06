@@ -16,6 +16,7 @@ def recevoir_email():
         headers = msg_data["payload"]["headers"]
 
         # Extraire les informations principales
+        id = msg["id"]
         sender = parseaddr(next((h["value"] for h in headers if h["name"] == "From"), "Inconnu"))[1]
         recipient = next((h["value"] for h in headers if h["name"] == "To"), "Inconnu")
         subject = next((h["value"] for h in headers if h["name"] == "Subject"), "Sans Sujet")
@@ -35,6 +36,7 @@ def recevoir_email():
         body = get_body(msg_data["payload"])
 
         full_email_list.append({
+            "id": id,
             "Expéditeur": sender,
             "Destinataire": recipient,
             "Sujet": subject,
