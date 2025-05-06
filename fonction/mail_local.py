@@ -5,11 +5,11 @@ import threading
 import queue
 
 
-async def enregistrer_mail(fonction,chemin):
+async def enregistrer_mail(fonction,chemin, nom_fichier):
     data = fonction()
-    os.makedirs('private/mail', exist_ok=True)
+    os.makedirs(chemin, exist_ok=True)
     # Écriture fichier de manière "bloquante" dans un thread séparé
-    json.dump(data, open(f"private/mail/{chemin}.json", "w"))
+    json.dump(data, open(f"{chemin}{nom_fichier}.json", "w"))
 
 def lire_mail(chemin):
     if os.path.exists(f"../private/mail/{chemin}.json"):
@@ -26,8 +26,9 @@ def start_async_loop():
     loop = asyncio.new_event_loop()
     asyncio.set_event_loop(loop)
     loop.run_until_complete(asyncio.gather(
-        enregistrer_mail(recevoir_email, "mail"),
-        enregistrer_mail(recevoir_email2, "full_name_list")
+        enregistrer_mail(recevoir_email, "private/mail/", "mail"),
+        enregistrer_mail(recevoir_email2, "private/mail/", "full_name_list"),
+        enregistrer_mail(recevoir_brouillons, "private/mail/", "brouillon_list")
     ))
 
 if __name__ == '__main__':
