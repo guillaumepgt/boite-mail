@@ -604,15 +604,6 @@ def corbeille(page):
 
 
     elif page == 2 :
-        # Canvas pour permettre le scroll
-        canvas = Canvas(fenetre_ecriture)
-        canvas.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.2, width=largeur_ecran*0.926, height=hauteur_ecran*0.3)
-
-        # Scrollbar liée au Canvas
-        my_scrollbar = Scrollbar(fenetre_ecriture, orient=VERTICAL, command=canvas.yview)
-        my_scrollbar.pack(side=RIGHT, fill=Y)
-
-        canvas.configure(yscrollcommand=my_scrollbar.set)
 
         # Frame dans le canvas pour contenir tous les boutons
         frame_boite = Frame(canvas)
