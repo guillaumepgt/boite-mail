@@ -475,7 +475,6 @@ def ecrire_mail_brouillon():
     # Afficher les brouillons
     different_brouillon = lire_mail("brouillon_list")
 
-    frame_brouillon.config(width=largeur_ecran, height=hauteur_ecran*3)
     for i, brouillon in enumerate(different_brouillon):
         Button(frame_brouillon, text=f"\n{brouillon['Sujet']}\n\n{brouillon['Contenu']}", font=("Arial", 20), bg="lightblue", fg="black",
                relief="flat", activebackground="white", activeforeground="black", command=modifier_brouillon()).place(
