@@ -449,13 +449,18 @@ def ecrire_mail_brouillon():
     # Créer une fenêtre dans le canvas
     canvas_frame = canvas.create_window((0, 0), window=frame_brouillon, anchor="nw")
 
-    different_brouillon = recevoir_brouillons()
+    different_brouillon = lire_mail("brouillon_list")
     
 
     frame_brouillon.config(width=largeur_ecran, height=hauteur_ecran*3)
 
     for i in range(len(different_brouillon)):
-        pass
+        Button(frame_brouillon, text=different_brouillon[i]["Objet"], font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black").place(
+            x=largeur_ecran * [0.1, 0.4, 0.7][i % 3],
+            y=hauteur_ecran * (0.3 * (i // 3)),
+            width=largeur_ecran * 0.2,
+            height=hauteur_ecran * 0.2
+        )
         
 
     def _on_mousewheel(event):
