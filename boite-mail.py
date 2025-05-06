@@ -17,7 +17,11 @@ fenetre.attributes("-fullscreen", True)  # Active le mode plein écran
 fenetre.bind("<Escape>", lambda event: fenetre.attributes("-fullscreen", False))
 
 
+<<<<<<< HEAD
 # Récupération des dimensions de l'écran
+=======
+# # Récupération des dimensions de l'écran
+>>>>>>> 47fcc94fcf24a8bf3be83b22ecd962311ba5fc63
 largeur_ecran = fenetre.winfo_screenwidth()
 hauteur_ecran = fenetre.winfo_screenheight()
 
@@ -40,8 +44,8 @@ if connecter():
 else:
     chemin_image_profil = r"img/profil.png"
 
-# Charger les images pour les différentes fenêtres
 photo_profil = PhotoImage(file=chemin_image_profil)
+# Charger les images pour les différentes fenêtres
 chemin_image_home = r"img/home.png"
 photo_home = PhotoImage(file=chemin_image_home)
 chemin_image_exit = r"img/exit.png"
@@ -144,7 +148,7 @@ def discussion(adresse_mail):
 
         # Appeler la fonction pour afficher le message
         y_offset_total = afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset_total)
-    
+
     def _on_mousewheel(event):
         canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
 
@@ -215,11 +219,11 @@ def parametre(event=None):
     if connecter() :
         # Ajout des options avec des icônes (si tu en as)
         choix.add_command(label="👤 Deconnexion", command=deconnexion)
-    
+
     elif not connecter() :
         choix.add_command(label="👤 Connexion", command=get_credentials)
         threading.Thread(target=start_async_loop, daemon=True).start()
-    
+
     choix.add_command(label="⚙️ Paramètres", command=lambda: print("Paramètres"))
     choix.add_separator()
     choix.add_command(label="❌ Quitter", command=fenetre.quit)
@@ -443,15 +447,6 @@ def page_accueil():
     global bouton_corbeille
     global bouton_settings
     global bouton_exit
-
-    if connecter() :
-        chemin_image_profil = download_profil_img("https://lh3.googleusercontent.com/a/ACg8ocIzEf6p-tK2jb3hGF7UVbqt3rzFeepD1bCSradFNKLy4LCtC00O=s96-c")
-        photo_profil = PhotoImage(file=chemin_image_profil)
-        photo_profil.image = photo_profil
-    elif not connecter() :
-        chemin_image_profil = r"profil.png"
-        photo_profil = PhotoImage(file=chemin_image_profil)
-        photo_profil.image = photo_profil
 
     bouton_boite_de_reception = Button(fenetre, text="Boite de réception", image=photo_mail, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=lambda: boite_de_reception(1))
     bouton_boite_de_reception.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
