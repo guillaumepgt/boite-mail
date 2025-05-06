@@ -454,13 +454,14 @@ def ecrire_mail():
     bouton_brouillon = Button(fenetre_ecriture, text="Brouillon", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command =lambda: ecrire_mail_brouillon())
     bouton_brouillon.place(x=largeur_ecran*0.32, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
-    bouton_mails_envoyes = Button(fenetre_ecriture, text="Mails envoyés", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
+    bouton_mails_envoyes = Button(fenetre_ecriture, text="Mails envoyés", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=envoye_mail)
     bouton_mails_envoyes.place(x=largeur_ecran*0.52, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
     bouton_corbeille = Button(fenetre_ecriture, text="Corbeille", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: corbeille(2))
     bouton_corbeille.place(x=largeur_ecran*0.72, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
 def envoye_mail():
+    global fenetre_boite, cache_images, canvas
     canvas.delete("all")  # vide le contenu précédent du canvas
     canvas.yview_moveto(0) # remettre le canvas en haut
 
@@ -471,7 +472,7 @@ def envoye_mail():
     # Créer une fenêtre dans le canvas
     canvas_frame = canvas.create_window((0, 0), window=frame_boite, anchor="nw")
 
-    contact = lire_mail("full_name_list")
+    contact = lire_mail("envoye_name_list")
     compteur = 0
 
     frame_boite.config(width=largeur_ecran, height=hauteur_ecran*3)
