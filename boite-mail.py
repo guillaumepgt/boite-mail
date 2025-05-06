@@ -143,16 +143,10 @@ def discussion(adresse_mail):
         # Appeler la fonction pour afficher le message
         y_offset_total = afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset_total)
 
-<<<<<<< HEAD
     canvas.configure(scrollregion=(0, 0, largeur_ecran * 0.8, y_offset_total))
     canvas.update_idletasks()
     canvas.yview_moveto(1.0)
 
-    def _on_mousewheel(event):
-        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
-=======
-    import platform
->>>>>>> 0c76a39b94e91c301a23f2b9dfe424eac3f2f8f9
 
 
     def _on_mousewheel(event):
