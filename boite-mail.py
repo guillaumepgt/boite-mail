@@ -526,7 +526,7 @@ def label(page):
 
 
 def corbeille(page):
-    global fenetre_boite, cache_images
+    global fenetre_boite, cache_images, canvas
     if page == 1 :
         # Création d'une nouvelle fenêtre
         fenetre_boite = Toplevel(fenetre)
