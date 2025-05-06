@@ -1,6 +1,7 @@
 from PIL import Image, ImageDraw, ImageFont
 import random
 import os
+from tkinter import PhotoImage
 
 def generer_couleur_fond():
     couleurs = [
@@ -17,9 +18,9 @@ def lettres(name):
             lettre += name[i+1].upper()
     return lettre
 
-def creer_icone_initiales(name, mail, taille=100, dossier="icones"):
-    if os.path.isfile(f"icones/{mail}.png"):
-        return f"icones/{mail}.png"
+def creer_icone_initiales(name, mail, taille=100, dossier="private/icones"):
+    if os.path.isfile(f"private/icones/{mail}.png"):
+        return f"private/icones/{mail}.png"
     os.makedirs(dossier, exist_ok=True)
 
     couleur_fond = generer_couleur_fond()
@@ -55,6 +56,12 @@ def creer_icone_initiales(name, mail, taille=100, dossier="icones"):
     image.save(chemin_fichier)
 
     return chemin_fichier
+
+def enregistrer_icone_tkinter(contact):
+    cache_images = {}
+    for i in contact:
+        cache_images[i["Email"]] = PhotoImage(file=creer_icone_initiales(i["Nom"], i["Email"]))
+    return cache_images
 
 if __name__ == "__main__":
     creer_icone_initiales("t t", "test")

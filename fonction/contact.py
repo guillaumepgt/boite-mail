@@ -1,4 +1,3 @@
-from get_tokens import *
 import os
 import base64
 import pickle
@@ -27,7 +26,7 @@ def recevoir_email2():
     service = build("gmail", "v1", credentials=creds)
 
     # Récupérer les 10 derniers messages
-    results = service.users().messages().list(userId="me", maxResults=10).execute()
+    results = service.users().messages().list(userId="me", maxResults=1000).execute()
     messages = results.get("messages", [])
 
     full_email_list = []
@@ -55,5 +54,10 @@ def recevoir_email2():
 
     return full_email_list
 
-if __name__ == "__main__":
+try:
+    # Si le module est utilisé dans un projet structuré avec sous-dossiers
+    from fonction.get_tokens import *
+except ImportError:
+    # Si le fichier est lancé directement, en standalone
+    from get_tokens import *
     print("✅ Emails récupérés avec succès !\n", recevoir_email2())
