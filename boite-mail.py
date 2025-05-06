@@ -531,10 +531,10 @@ def ecrire_mail_brouillon():
 
     for i, brouillon in enumerate(different_brouillon):
         sujet = brouillon["Sujet"]
-        aperçu_sujet = sujet[:10] + "..." if len(sujet) > 10 else sujet
+        apercu_sujet = sujet[:10] + "..." if len(sujet) > 10 else sujet
         contenu = brouillon["Contenu"]
-        aperçu_contenu = contenu[:10] + "..." if len(contenu) > 10 else contenu
-        Button(frame_brouillon, text=f"\n{aperçu_sujet}\n\n{aperçu_contenu}", font=("Arial", 20), bg="lightblue", fg="black",
+        apercu_contenu = contenu[:10] + "..." if len(contenu) > 10 else contenu
+        Button(frame_brouillon, text=f"\n{aperçu_sujet}\n\n{apercu_contenu}", font=("Arial", 20), bg="lightblue", fg="black",
                relief="flat", activebackground="white", activeforeground="black", command=lambda b=brouillon: modifier_brouillon(b)).place(
                 x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
                 y=hauteur_ecran * (0.3 * (compteur // 3)),
