@@ -530,7 +530,6 @@ def corbeille(page):
         canvas_frame = canvas.create_window((0, 0), window=frame_boite, anchor="nw")
 
         contact = lire_mail("full_name_list_corbeille")
-        print(contact)
         compteur = 0
 
         frame_boite.config(width=largeur_ecran, height=hauteur_ecran*3)
