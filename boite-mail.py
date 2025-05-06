@@ -324,15 +324,11 @@ def boite_de_reception(page):
 
 
     elif page == 2 :
-        # Canvas pour permettre le scroll
-        canvas = Canvas(fenetre_ecriture)
-        canvas.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.2, width=largeur_ecran*0.926, height=hauteur_ecran*0.3)
 
         # Scrollbar liée au Canvas
         my_scrollbar = Scrollbar(fenetre_ecriture, orient=VERTICAL, command=canvas.yview)
         my_scrollbar.pack(side=RIGHT, fill=Y)
 
-        canvas.configure(yscrollcommand=my_scrollbar.set)
 
         # Frame dans le canvas pour contenir tous les boutons
         frame_boite = Frame(canvas)
@@ -432,16 +428,6 @@ def ecrire_mail():
 
 
 def ecrire_mail_brouillon():
-    # Canvas pour permettre le scroll
-    canvas = Canvas(fenetre_ecriture)
-    canvas.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.2, width=largeur_ecran*0.926, height=hauteur_ecran*0.3)
-
-    # Scrollbar liée au Canvas
-    my_scrollbar = Scrollbar(fenetre_ecriture, orient=VERTICAL, command=canvas.yview)
-    my_scrollbar.pack(side=RIGHT, fill=Y)
-
-    canvas.configure(yscrollcommand=my_scrollbar.set)
-
     # Frame dans le canvas pour contenir tous les boutons
     frame_brouillon = Frame(canvas)
     frame_brouillon.bind("<Configure>",lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
@@ -450,7 +436,6 @@ def ecrire_mail_brouillon():
     canvas_frame = canvas.create_window((0, 0), window=frame_brouillon, anchor="nw")
 
     different_brouillon = lire_mail("brouillon_list")
-    
 
     frame_brouillon.config(width=largeur_ecran, height=hauteur_ecran*3)
 
