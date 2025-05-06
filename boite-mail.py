@@ -215,7 +215,6 @@ def parametre(event=None):
 
     elif not connecter() :
         choix.add_command(label="👤 Connexion", command=get_credentials)
-        threading.Thread(target=start_async_loop, daemon=True).start()
 
     choix.add_command(label="⚙️ Paramètres", command=lambda: print("Paramètres"))
     choix.add_separator()
@@ -227,6 +226,7 @@ def parametre(event=None):
 
 def boite_de_reception(page):
     global fenetre_boite, cache_images
+    threading.Thread(target=start_async_loop, daemon=True).start()
     if page == 1 :
         # Création d'une nouvelle fenêtre
         fenetre_boite = Toplevel(fenetre)
