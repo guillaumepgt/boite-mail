@@ -8,6 +8,7 @@ from fonction.recevoir_information import *
 from fonction.contact import *
 from fonction.icone_contacts import *
 from fonction.mail_local import *
+import platform
 
 fenetre = Tk()
 fenetre.title("Boite Mail")
