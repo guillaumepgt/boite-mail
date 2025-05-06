@@ -205,7 +205,6 @@ def deconnexion():
     chemin_image_profil = r"img/profil.png"
     photo_profil = PhotoImage(file=chemin_image_profil)
     photo_profil.image = photo_profil
-    fenetre.destroy()
     page_accueil()
 
 def parametre(event=None):
