@@ -303,7 +303,6 @@ def boite_de_reception(page):
         bouton_exit = Button(fenetre_boite, image=photo_exit, relief="flat", command=fenetre.quit)
         bouton_exit.place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
 
-        import platform
 
         def _on_mousewheel(event):
             if platform.system() == 'Windows':
