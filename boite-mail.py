@@ -43,6 +43,7 @@ else:
     chemin_image_profil = r"img/profil.png"
 
 # Charger les images pour les différentes fenêtres
+photo_profil = PhotoImage(file=chemin_image_profil)
 chemin_image_home = r"img/home.png"
 photo_home = PhotoImage(file=chemin_image_home)
 chemin_image_exit = r"img/exit.png"
