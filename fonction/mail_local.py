@@ -30,7 +30,9 @@ def start_async_loop():
         enregistrer_mail(recevoir_email2, "private/mail/", "full_name_list"),
         enregistrer_mail(recevoir_brouillons, "private/mail/", "brouillon_list"),
         enregistrer_mail(recevoir_corbeille, "private/mail/", "corbeille_list"),
-        enregistrer_mail(recevoir_corbeille2, "private/mail/", "full_name_list_corbeille")
+        enregistrer_mail(recevoir_corbeille2, "private/mail/", "full_name_list_corbeille"),
+        enregistrer_mail(recevoir_envoyes, "private/mail/", "envoye_list"),
+        enregistrer_mail(recevoir_envoyes2, "private/mail/", "envoye_name_list")
     ))
 
 if __name__ == '__main__':
@@ -38,9 +40,11 @@ if __name__ == '__main__':
     from contact import *
     from brouillon import *
     from corbeille import *
+    from envoyer_mail import *
     print(lire_mail("mail"))
 else:
     from fonction.contact import *
     from fonction.recevoir_mail import *
     from fonction.brouillon import *
     from fonction.corbeille import *
+    from fonction.envoyer_mail import *

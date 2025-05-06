@@ -4,10 +4,61 @@ import base64
 import smtplib
 # from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from email.utils import parseaddr
 # from google.auth.transport.requests import Request
 # from google.oauth2.credentials import Credentials
 # from google_auth_oauthlib.flow import InstalledAppFlow
 
+def recevoir_envoyes():
+    creds = get_credentials()
+    service = build("gmail", "v1", credentials=creds)
+
+    # Récupérer les mails envoyés
+    results = service.users().messages().list(
+        userId="me",
+        labelIds=["SENT"],
+        maxResults=1000
+    ).execute()
+
+    messages = results.get("messages", [])
+
+    envoyes = []
+    for msg in messages:
+        message_id = msg["id"]
+        msg_data = service.users().messages().get(userId="me", id=message_id, format="full").execute()
+        headers = msg_data["payload"]["headers"]
+
+        sender = parseaddr(next((h["value"] for h in headers if h["name"] == "From"), "Inconnu"))[1]
+        recipient = next((h["value"] for h in headers if h["name"] == "To"), "Inconnu")
+        subject = next((h["value"] for h in headers if h["name"] == "Subject"), "Sans Sujet")
+
+        def get_body(payload):
+            if "parts" in payload:
+                for part in payload["parts"]:
+                    if part["mimeType"] == "text/plain" and "data" in part["body"]:
+                        data = part["body"]["data"]
+                        return base64.urlsafe_b64decode(data).decode("utf-8")
+            elif payload.get("mimeType") == "text/plain" and "data" in payload.get("body", {}):
+                data = payload["body"]["data"]
+                return base64.urlsafe_b64decode(data).decode("utf-8")
+            return "Aucun contenu trouvé."
+
+        body = get_body(msg_data["payload"])
+
+        envoyes.append({
+            "id": message_id,
+            "Expéditeur": sender,
+            "Destinataire": recipient,
+            "Sujet": subject,
+            "Contenu": body
+        })
+
+    print("✅ Mails envoyés récupérés avec succès !")
+    return envoyes
 
 # Fonction pour générer l'authentification OAuth2
 def generate_oauth2_string(username, access_token):
