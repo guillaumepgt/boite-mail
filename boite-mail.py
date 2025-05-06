@@ -143,14 +143,35 @@ def discussion(adresse_mail):
         # Appeler la fonction pour afficher le message
         y_offset_total = afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset_total)
 
+<<<<<<< HEAD
     canvas.configure(scrollregion=(0, 0, largeur_ecran * 0.8, y_offset_total))
     canvas.update_idletasks()
     canvas.yview_moveto(1.0)
 
     def _on_mousewheel(event):
         canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+=======
+    import platform
+>>>>>>> 0c76a39b94e91c301a23f2b9dfe424eac3f2f8f9
 
-    canvas.bind_all("<MouseWheel>", _on_mousewheel)
+
+    def _on_mousewheel(event):
+        if platform.system() == 'Windows':
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        elif platform.system() == 'Darwin':  # macOS
+            canvas.yview_scroll(int(-1 * (event.delta)), "units")
+        else:  # Linux
+            if event.num == 4:
+                canvas.yview_scroll(-1, "units")
+            elif event.num == 5:
+                canvas.yview_scroll(1, "units")
+
+        # Bind selon la plateforme
+    if platform.system() in ['Windows', 'Darwin']:
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+    else:  # Linux
+        canvas.bind_all("<Button-4>", _on_mousewheel)
+        canvas.bind_all("<Button-5>", _on_mousewheel)
 
 
 def afficher_message(canvas, expéditeur, destinataire, sujet, contenu, y_offset):
@@ -287,10 +308,26 @@ def boite_de_reception(page):
         bouton_exit = Button(fenetre_boite, image=photo_exit, relief="flat", command=fenetre.quit)
         bouton_exit.place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
 
-        def _on_mousewheel(event):
-            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        import platform
 
-        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        def _on_mousewheel(event):
+            if platform.system() == 'Windows':
+                canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            elif platform.system() == 'Darwin':  # macOS
+                canvas.yview_scroll(int(-1 * (event.delta)), "units")
+            else:  # Linux
+                if event.num == 4:
+                    canvas.yview_scroll(-1, "units")
+                elif event.num == 5:
+                    canvas.yview_scroll(1, "units")
+
+        # Bind selon la plateforme
+        if platform.system() in ['Windows', 'Darwin']:
+            canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        else:  # Linux
+            canvas.bind_all("<Button-4>", _on_mousewheel)
+            canvas.bind_all("<Button-5>", _on_mousewheel)
+
 
     elif page == 2 :
         # Canvas pour permettre le scroll
@@ -333,9 +370,22 @@ def boite_de_reception(page):
                 compteur += 1
 
         def _on_mousewheel(event):
-            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            if platform.system() == 'Windows':
+                canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+            elif platform.system() == 'Darwin':  # macOS
+                canvas.yview_scroll(int(-1 * (event.delta)), "units")
+            else:  # Linux
+                if event.num == 4:
+                    canvas.yview_scroll(-1, "units")
+                elif event.num == 5:
+                    canvas.yview_scroll(1, "units")
 
-        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        # Bind selon la plateforme
+        if platform.system() in ['Windows', 'Darwin']:
+            canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        else:  # Linux
+            canvas.bind_all("<Button-4>", _on_mousewheel)
+            canvas.bind_all("<Button-5>", _on_mousewheel)
 
 
 
