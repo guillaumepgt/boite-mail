@@ -28,15 +28,18 @@ def start_async_loop():
     loop.run_until_complete(asyncio.gather(
         enregistrer_mail(recevoir_email, "private/mail/", "mail"),
         enregistrer_mail(recevoir_email2, "private/mail/", "full_name_list"),
-        enregistrer_mail(recevoir_brouillons, "private/mail/", "brouillon_list")
+        enregistrer_mail(recevoir_brouillons, "private/mail/", "brouillon_list"),
+        enregistrer_mail(recevoir_corbeille, "private/mail/", "corbeille_list")
     ))
 
 if __name__ == '__main__':
     from recevoir_mail import *
     from contact import *
     from brouillon import *
+    from corbeille import *
     print(lire_mail("mail"))
 else:
     from fonction.contact import *
     from fonction.recevoir_mail import *
     from fonction.brouillon import *
+    from fonction.corbeille import *
