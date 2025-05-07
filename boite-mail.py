@@ -467,12 +467,64 @@ def ecrire_mail():
     bouton_brouillon = Button(fenetre_ecriture, text="Brouillon", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command =lambda: ecrire_mail_brouillon())
     bouton_brouillon.place(x=largeur_ecran*0.32, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
-    bouton_mails_envoyes = Button(fenetre_ecriture, text="Mails envoyés", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
+    bouton_mails_envoyes = Button(fenetre_ecriture, text="Mails envoyés", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=envoye_mail)
     bouton_mails_envoyes.place(x=largeur_ecran*0.52, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
     bouton_corbeille = Button(fenetre_ecriture, text="Corbeille", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: corbeille(2))
     bouton_corbeille.place(x=largeur_ecran*0.72, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
+
+def envoye_mail():
+    global fenetre_boite, cache_images, canvas
+    canvas.delete("all")  # vide le contenu précédent du canvas
+    canvas.yview_moveto(0) # remettre le canvas en haut
+
+    # Frame dans le canvas pour contenir tous les boutons
+    frame_boite = Frame(canvas)
+    frame_boite.bind("<Configure>",lambda event: canvas.configure(scrollregion=canvas.bbox("all")))
+
+    # Créer une fenêtre dans le canvas
+    canvas_frame = canvas.create_window((0, 0), window=frame_boite, anchor="nw")
+
+    contact = lire_mail("envoye_name_list")
+    compteur = 0
+
+    frame_boite.config(width=largeur_ecran, height=hauteur_ecran*3)
+
+    for i in range(len(contact)):
+        use = 0
+        for j in range(i):
+            if contact[i]["Nom"] == contact[j]["Nom"]:
+                use = 1
+        if use == 0:
+            if contact[i]["Email"] not in cache_images :
+                cache_images = enregistrer_icone_tkinter(contact)
+            icone = cache_images[contact[i]["Email"]]
+            Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email)).place(
+                x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
+                y=hauteur_ecran * (0.3 * (compteur // 3)),
+                width=largeur_ecran * 0.2,
+                height=hauteur_ecran * 0.2
+            )
+            compteur += 1
+
+    def _on_mousewheel(event):
+        if platform.system() == 'Windows':
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        elif platform.system() == 'Darwin':  # macOS
+            canvas.yview_scroll(int(-1 * event.delta), "units")
+        else:  # Linux
+            if event.num == 4:
+                canvas.yview_scroll(-1, "units")
+            elif event.num == 5:
+                canvas.yview_scroll(1, "units")
+
+    # Bind selon la plateforme
+    if platform.system() in ['Windows', 'Darwin']:
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+    else:  # Linux
+        canvas.bind_all("<Button-4>", _on_mousewheel)
+        canvas.bind_all("<Button-5>", _on_mousewheel)
 
 def ecrire_mail_brouillon():
     global canvas, brouillon
@@ -497,7 +549,7 @@ def ecrire_mail_brouillon():
         apercu_sujet = sujet[:10] + "..." if len(sujet) > 10 else sujet
         contenu = brouillon["Contenu"]
         apercu_contenu = contenu[:10] + "..." if len(contenu) > 10 else contenu
-        Button(frame_brouillon, text=f"\n{aperçu_sujet}\n\n{apercu_contenu}", font=("Arial", 20), bg="lightblue", fg="black",
+        Button(frame_brouillon, text=f"\n{apercu_sujet}\n\n{apercu_contenu}", font=("Arial", 20), bg="lightblue", fg="black",
                relief="flat", activebackground="white", activeforeground="black", command=lambda b=brouillon: modifier_brouillon(b)).place(
                 x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
                 y=hauteur_ecran * (0.3 * (compteur // 3)),
