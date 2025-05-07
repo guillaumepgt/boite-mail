@@ -21,50 +21,15 @@ def deviner_nom_prenom_depuis_email(email):
     else:
         return parts[0].capitalize(), parts[1].capitalize()
 
-def recevoir_email2():
-    creds = get_credentials()
-    service = build("gmail", "v1", credentials=creds)
+def recevoir_info(label=None, recipient_field="From"):
+    service = build("gmail", "v1", credentials=get_credentials())
 
-    # Récupérer les 1000 derniers messages
-    results = service.users().messages().list(userId="me", maxResults=1000).execute()
-    messages = results.get("messages", [])
-
-    full_email_list = []
-    for msg in messages:
-        msg_data = service.users().messages().get(userId="me", id=msg["id"]).execute()
-        headers = msg_data["payload"]["headers"]
-
-        # Extraire les champs
-        raw_sender = next((h["value"] for h in headers if h["name"] == "From"), "Inconnu")
-
-        # Parser l'expéditeur
-        name, email_address = parseaddr(raw_sender)
-
-        if name:
-            first_name, last_name = (name.split(" ", 1) + [""])[:2]
-        else:
-            first_name, last_name = deviner_nom_prenom_depuis_email(email_address)
-
-        body = msg_data.get("snippet", "Aucun contenu trouvé.")
-
-        full_email_list.append({
-            "Nom": name if name else f"{first_name} {last_name}".strip(),
-            "Email": email_address
-        })
-
-    return full_email_list
-
-def recevoir_corbeille2():
-    creds = get_credentials()
-    service = build("gmail", "v1", credentials=creds)
-
-    # Récupérer les 1000 derniers messages
-    results = service.users().messages().list(
-        userId="me",
-        labelIds=["TRASH"],
-        includeSpamTrash=True,
-        maxResults=1000
-    ).execute()
+    params = {
+        "userId": "me",
+        "maxResults": 1000,
+        "includeSpamTrash": True
+    }
+    results = service.users().messages().list(**params).execute()
     messages = results.get("messages", [])
 
     full_email_list = []
@@ -72,61 +37,19 @@ def recevoir_corbeille2():
         msg_data = service.users().messages().get(userId="me", id=msg["id"], format="full").execute()
         headers = msg_data["payload"]["headers"]
 
-        # Extraire les champs
-        raw_sender = next((h["value"] for h in headers if h["name"] == "From"), "Inconnu")
-
-        # Parser l'expéditeur
-        name, email_address = parseaddr(raw_sender)
-
+        # Extraire l'expéditeur ou le destinataire selon le champ
+        raw_address = next((h["value"] for h in headers if h["name"] == recipient_field), "Inconnu")
+        name, email_address = parseaddr(raw_address)
         if name:
             first_name, last_name = (name.split(" ", 1) + [""])[:2]
         else:
             first_name, last_name = deviner_nom_prenom_depuis_email(email_address)
+        if email_address != "Inconnu" and all(email_address != d["Email"] for d in full_email_list):
+            full_email_list.append({
+                "Nom": name if name else f"{first_name} {last_name}".strip(),
+                "Email": email_address
+            })
 
-        body = msg_data.get("snippet", "Aucun contenu trouvé.")
-
-        full_email_list.append({
-            "Nom": name if name else f"{first_name} {last_name}".strip(),
-            "Email": email_address
-        })
-
-    return full_email_list
-
-def recevoir_envoyes2():
-    creds = get_credentials()
-    service = build("gmail", "v1", credentials=creds)
-
-    # Récupérer les 1000 derniers messages
-    results = service.users().messages().list(
-        userId="me",
-        labelIds=["SENT"],
-        includeSpamTrash=True,
-        maxResults=1000
-    ).execute()
-    messages = results.get("messages", [])
-
-    full_email_list = []
-    for msg in messages:
-        msg_data = service.users().messages().get(userId="me", id=msg["id"], format="full").execute()
-        headers = msg_data["payload"]["headers"]
-
-        # Extraire les champs
-        raw_sender = next((h["value"] for h in headers if h["name"] == "To"), "Inconnu")
-
-        # Parser l'expéditeur
-        name, email_address = parseaddr(raw_sender)
-
-        if name:
-            first_name, last_name = (name.split(" ", 1) + [""])[:2]
-        else:
-            first_name, last_name = deviner_nom_prenom_depuis_email(email_address)
-
-        body = msg_data.get("snippet", "Aucun contenu trouvé.")
-
-        full_email_list.append({
-            "Nom": name if name else f"{first_name} {last_name}".strip(),
-            "Email": email_address
-        })
 
     return full_email_list
 
@@ -136,4 +59,5 @@ try:
 except ImportError:
     # Si le fichier est lancé directement, en standalone
     from get_tokens import *
-    print("✅ Emails récupérés avec succès !\n", recevoir_envoyes2())
+    if __name__ == "__main__":
+        print("✅ Emails récupérés avec succès !\n", recevoir_info())

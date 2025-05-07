@@ -18,8 +18,10 @@ def get_user_info():
     """ Récupère les informations de l'utilisateur connecté. """
     creds = get_credentials()
     service = build("oauth2", "v2", credentials=creds)
-
-    user_info = service.userinfo().get().execute()
+    try:
+        user_info = service.userinfo().get().execute()
+    except:
+        print("aucune connexion")
     return user_info
 
 def connecter():
@@ -39,20 +41,20 @@ def download_profil_img(url):
     image.save(chemin_sauvegarde, format="PNG")
     return chemin_sauvegarde
 
-
-if __name__ == "__main__":
-    from get_tokens import *
-    if connecter():
-        user_info = get_user_info()
-        print("✅ Informations de l'utilisateur connecté :")
-        print(f"📧 Email      : {user_info['email']}")
-        print(f"👤 Nom        : {user_info.get('name', 'Inconnu')}")
-        print(f"🖼️ Photo URL  : {user_info.get('picture', 'Aucune photo disponible')}")
-    else:
-        print(False)
-    CREDENTIALS_FILE = "../private/token.pkl"
-    CLIENT_SECRET_FILE = "../private/client_secret.json"
-else:
+try:
     from fonction.get_tokens import *
     CREDENTIALS_FILE = "private/token.pkl"
     CLIENT_SECRET_FILE = "private/client_secret.json"
+except ImportError:
+    CREDENTIALS_FILE = "../private/token.pkl"
+    CLIENT_SECRET_FILE = "../private/client_secret.json"
+    from get_tokens import *
+    if connecter():
+        if __name__ == "__main__":
+            user_info = get_user_info()
+            print("✅ Informations de l'utilisateur connecté :")
+            print(f"📧 Email      : {user_info['email']}")
+            print(f"👤 Nom        : {user_info.get('name', 'Inconnu')}")
+            print(f"🖼️ Photo URL  : {user_info.get('picture', 'Aucune photo disponible')}")
+    else:
+        print(False)

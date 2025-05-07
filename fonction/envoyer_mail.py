@@ -91,13 +91,14 @@ def envoyer_email(subject, body, sender, recipients):
         print(f"Une erreur est survenue : {e}")
 
 # Exécution du programme principal
-if __name__ == '__main__':
-    from get_tokens import *
-    # Définir les informations nécessaires
-    sender = 'mailboite07@gmail.com'
-    recipients = ['mailboite07@gmail.com']
-    subject = "salo"
-    body = "zabiubfyzayufazb"
-    envoyer_email(subject, body, sender, recipients)
-else:
+try:
     from fonction.get_tokens import *
+except ImportError:
+    from get_tokens import *
+    if __name__ == '__main__':
+        # Définir les informations nécessaires
+        sender = 'mailboite07@gmail.com'
+        recipients = ['mailboite07@gmail.com']
+        subject = "salo"
+        body = "zabiubfyzayufazb"
+        envoyer_email(subject, body, sender, recipients)

@@ -32,6 +32,7 @@ def recevoir_corbeille():
         msg_data = service.users().messages().get(userId="me", id=msg["id"], format="full").execute()
         headers = msg_data["payload"]["headers"]
 
+        id = msg["id"]
         sender = parseaddr(next((h["value"] for h in headers if h["name"] == "From"), "Inconnu"))[1]
         recipient = next((h["value"] for h in headers if h["name"] == "To"), "Inconnu")
         subject = next((h["value"] for h in headers if h["name"] == "Subject"), "Sans Sujet")
@@ -50,6 +51,7 @@ def recevoir_corbeille():
         body = get_body(msg_data["payload"])
 
         corbeille.append({
+            "id": id,
             "Email": sender,
             "Destinataire": recipient,
             "Sujet": subject,
