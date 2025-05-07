@@ -121,10 +121,8 @@ def discussion(adresse_mail):
     fenetre_discussion.title("Discuter")
     fenetre_discussion.attributes("-fullscreen", True)
 
-    Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("discussion")).place(
-        x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
-    Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95,
-                                                                                            y=hauteur_ecran * 0.05)
+    Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("discussion")).place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
+    Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
 
     canvas = Canvas(fenetre_discussion, bg="white", bd=1)
     canvas.place(x=largeur_ecran * 0.1, y=hauteur_ecran * 0.1, width=largeur_ecran * 0.8, height=hauteur_ecran * 0.8)
@@ -135,14 +133,28 @@ def discussion(adresse_mail):
 
     canvas.configure(yscrollcommand=my_scrollbar.set)
 
-    y_offset_total = 20  # point de départ des messages
-
+    # Calculer les mails à afficher
     mails = lire_mail("mail")
-    liste_mails = []
-    for i in range(len(mails)):
-        if mails[i]["Expéditeur"] == adresse_mail :
-            personne = mails[i]
-            liste_mails.append(personne)
+    liste_mails = [m for m in mails if m["Expéditeur"] == adresse_mail]
+
+    # Inverser l’ordre pour avoir du plus ancien au plus récent
+    liste_mails = liste_mails[::-1]
+
+    # Étape 1 : Mesurer la hauteur totale des messages (sans les afficher)
+    font = ("Courier", 14)
+    bulle_width = largeur_ecran * 0.6
+    bulle_bords = 20
+    total_height = 0
+    for mail in liste_mails:
+        text = mail["Sujet"] + "\n" + mail["Contenu"]
+        text_height = get_text_height(canvas, text, font, bulle_width)
+        bulle_height = text_height + 3 * bulle_bords
+        total_height += bulle_height + 30  # espacement
+
+    # Étape 2 : Démarrer plus bas si le contenu ne remplit pas le canvas
+    visible_height = hauteur_ecran * 0.8
+    y_offset_total = max(20, visible_height - total_height)
+
     for mail in liste_mails:
         expediteur = mail["Expéditeur"]
         destinataire = mail["Destinataire"]
@@ -527,21 +539,18 @@ def modifier_brouillon(brouillon):
         ecriture_mail.insert("1.0", brouillon["Contenu"])
 
 
-def label(page):
+def label():
     global fenetre_label
-    if page == 1 :
-        # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
-        fenetre_label = Toplevel(fenetre)
-        fenetre_label.title("Ecrire un mail")
-        fenetre_label.attributes("-fullscreen", True)
+    # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
+    fenetre_label = Toplevel(fenetre)
+    fenetre_label.title("Ecrire un mail")
+    fenetre_label.attributes("-fullscreen", True)
 
-        Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
-        Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
+    Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
+    Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
 
-        bouton_creation_label = Button(fenetre_label, text="Création d'un nouvelle catégorie", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
-        bouton_creation_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.05, width=largeur_ecran*0.6, height=hauteur_ecran*0.065)
-    elif page == 2 :
-        pass
+    bouton_creation_label = Button(fenetre_label, text="Création d'un nouvelle catégorie", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
+    bouton_creation_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.05, width=largeur_ecran*0.6, height=hauteur_ecran*0.065)
 
 
 
