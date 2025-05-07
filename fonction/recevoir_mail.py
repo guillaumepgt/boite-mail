@@ -73,5 +73,6 @@ except ImportError:
     # Si le fichier est lancé directement, en standalone
     from get_tokens import *
     from recevoir_information import *
-    print(recevoir_email("messages", 100))
+    if __name__ == "__main__":
+        print(recevoir_email("messages", 100))
 

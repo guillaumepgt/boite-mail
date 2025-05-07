@@ -56,5 +56,3 @@ except ImportError:
             print(f"📧 Email      : {user_info['email']}")
             print(f"👤 Nom        : {user_info.get('name', 'Inconnu')}")
             print(f"🖼️ Photo URL  : {user_info.get('picture', 'Aucune photo disponible')}")
-    else:
-        print(False)

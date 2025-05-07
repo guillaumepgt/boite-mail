@@ -3,6 +3,7 @@ from tkinter import *
 import asyncio
 import shutil
 import platform
+
 from fonction.envoyer_mail import *
 from fonction.recevoir_mail import *
 from fonction.recevoir_information import *
@@ -10,213 +11,15 @@ from fonction.contact import *
 from fonction.icone_contacts import *
 from fonction.mail_local import *
 
+from fonction.graphique.fenetre import *
+from fonction.graphique.chargement_image import *
 from fonction.graphique.corbeille import *
 from fonction.graphique.scroll import *
+from fonction.graphique.fonction_bouton import *
+from fonction.graphique.fonction_saisi import *
 
-
-
-fenetre = Tk()
-fenetre.title("Boite Mail")
-fenetre.attributes("-fullscreen", True)  # Active le mode plein écran
-
-# Quitter le plein écran avec Échap
-fenetre.bind("<Escape>", lambda event: fenetre.attributes("-fullscreen", False))
-
-largeur_ecran = fenetre.winfo_screenwidth()
-hauteur_ecran = fenetre.winfo_screenheight()
-
-
-# Charger les images pour la fenêtre principale
-chemin_image_mail = r"img/mail.png"
-photo_mail = PhotoImage(file=chemin_image_mail)
-chemin_image_ecrire = r"img/ecrire.png"
-photo_ecrire = PhotoImage(file=chemin_image_ecrire)
-chemin_image_label = r"img/label.png"
-photo_label = PhotoImage(file=chemin_image_label)
-chemin_image_poubelle = r"img/poubelle.png"
-photo_poubelle = PhotoImage(file=chemin_image_poubelle)
-chemin_image_settings = r"img/settings.png"
-photo_settings = PhotoImage(file=chemin_image_settings)
-chemin_image_profil = r"img/profil.png"
-if connecter():
-    threading.Thread(target=start_async_loop, daemon=True).start()
-    chemin_image_profil = download_profil_img(get_user_info()["picture"])
-else:
-    chemin_image_profil = r"img/profil.png"
-
-photo_profil = PhotoImage(file=chemin_image_profil)
-# Charger les images pour les différentes fenêtres
-chemin_image_home = r"img/home.png"
-photo_home = PhotoImage(file=chemin_image_home)
-chemin_image_exit = r"img/exit.png"
-photo_exit = PhotoImage(file=chemin_image_exit)
-chemin_image_line = r"img/line.png"
-photo_line = PhotoImage(file=chemin_image_line)
-
-# Empêcher la suppression des images
-photo_mail.image = photo_mail
-photo_ecrire.image = photo_ecrire
-photo_label.image = photo_label
-photo_poubelle.image = photo_poubelle
-photo_home.image = photo_home
-photo_exit.image = photo_exit
-photo_settings.image = photo_settings
-photo_line.image = photo_line
-photo_profil.image = photo_profil
-cache_images = {}
-
-# Création des fonctions du programme
-
-def vider_saisi_entry(event, entry):
-    if entry.get() == "Recherche des mails":
-        entry.delete(0, END)
-
-def vider_saisi_text(event, widget):
-    contenu = widget.get("1.0", "end-1c").strip()
-    if contenu in ["Ecrire un mail", "Ecrire un objet", "Ecrire une adresse mail"]:
-        widget.delete("1.0", "end")
-
-
-def home(fenetres):
-    if fenetres == "boite" and "fenetre_boite" in globals():
-        fenetre_boite.destroy()
-    elif fenetres == "discussion" and "fenetre_discussion" in globals():
-        fenetre_discussion.destroy()
-    elif fenetres == "ecriture" and "fenetre_ecriture" in globals():
-        fenetre_ecriture.destroy()
-    elif fenetres == "label" and "fenetre_label" in globals():
-        fenetre_label.destroy()
-
-
-def rectangle_arrondi(canvas, x1, y1, x2, y2, radius, **kwargs):
-    # Dessiner un rectangle avec des coins arrondis en utilisant des arcs de cercle
-    return canvas.create_polygon(
-        x1 + radius, y1,
-        x2 - radius, y1,
-        x2, y1 + radius,
-        x2, y2 - radius,
-        x2 - radius, y2,
-        x1 + radius, y2,
-        x1, y2 - radius,
-        x1, y1 + radius,
-        fill=kwargs.get('fill', 'white'),
-        outline=kwargs.get('outline', 'black'),
-        width=kwargs.get('width', 1),
-        smooth=True
-    )
-
-# Fonction pour ajuster la hauteur de la bulle en fonction du texte
-def get_text_height(canvas, text, font, width):
-    # Créer un texte temporaire pour mesurer la hauteur
-    text_id = canvas.create_text(0, 0, text=text, font=font, width=width)
-    bbox = canvas.bbox(text_id)  # Récupérer la bounding box du texte
-    height = bbox[3] - bbox[1]  # Calculer la hauteur
-    canvas.delete(text_id)  # Supprimer le texte temporaire
-    return height
-
-
-def discussion(adresse_mail, page):
-    global fenetre_discussion
-    # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
-    fenetre_discussion = Toplevel(fenetre)
-    fenetre_discussion.title("Discuter")
-    fenetre_discussion.attributes("-fullscreen", True)
-
-    Button(fenetre_discussion, image=photo_home, relief="flat", command=lambda: home("discussion")).place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
-    Button(fenetre_discussion, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
-
-    canvas = Canvas(fenetre_discussion, bg="white", bd=1)
-    canvas.place(x=largeur_ecran * 0.1, y=hauteur_ecran * 0.1, width=largeur_ecran * 0.8, height=hauteur_ecran * 0.8)
-
-    # Scrollbar liée au Canvas
-    my_scrollbar = Scrollbar(fenetre_discussion, orient=VERTICAL, command=canvas.yview)
-    my_scrollbar.pack(side=RIGHT, fill=Y)
-
-    canvas.configure(yscrollcommand=my_scrollbar.set)
-
-    # Calculer les mails à afficher
-    mails = lire_mail({"boite_principal":"mail", "envoye":"envoye_list", "corbeille": "corbeille_list"}[page])
-    liste_mails = [m for m in mails if m[{"boite_principal": "Expéditeur", "envoye": "Destinataire", "corbeille": "Expéditeur"}[page]] == adresse_mail]
-    # Inverser l’ordre pour avoir du plus ancien au plus récent
-    liste_mails = liste_mails[::-1]
-
-    # Étape 1 : Mesurer la hauteur totale des messages (sans les afficher)
-    font = ("Courier", 14)
-    bulle_width = largeur_ecran * 0.6
-    bulle_bords = 20
-    total_height = 0
-    for mail in liste_mails:
-        text = mail["Sujet"] + "\n" + mail["Contenu"]
-        text_height = get_text_height(canvas, text, font, bulle_width)
-        bulle_height = text_height + 3 * bulle_bords
-        total_height += bulle_height + 30  # espacement
-
-    # Étape 2 : Démarrer plus bas si le contenu ne remplit pas le canvas
-    visible_height = hauteur_ecran * 0.8
-    y_offset_total = max(20, visible_height - total_height)
-
-    for mail in liste_mails:
-        expediteur = mail["Expéditeur"]
-        destinataire = mail["Destinataire"]
-        sujet = mail["Sujet"]
-        contenu = mail["Contenu"]
-
-        # Appeler la fonction pour afficher le message
-        y_offset_total = afficher_message(canvas, expediteur, destinataire, sujet, contenu, y_offset_total)
-
-    canvas.configure(scrollregion=(0, 0, largeur_ecran * 0.8, y_offset_total))
-    canvas.update_idletasks()
-    canvas.yview_moveto(1.0)
-
-    if platform.system() in ['Windows', 'Darwin']:
-        canvas.bind_all("<MouseWheel>", lambda e: scroll_canvas(canvas, e))
-    else:
-        canvas.bind_all("<Button-4>", lambda e: scroll_canvas(canvas, e))
-        canvas.bind_all("<Button-5>", lambda e: scroll_canvas(canvas, e))
-
-
-def afficher_message(canvas, expediteur, destinataire, sujet, contenu, y_offset):
-    align = "e" if expediteur == destinataire else "w"
-
-    bulle_width = largeur_ecran * 0.6
-    bulle_bords = 20
-
-    x_offset = 20 if align == "w" else largeur_ecran * 0.8 - bulle_width - 20
-
-    font = ("Courier", 14)
-    text = sujet + "\n" + contenu
-    text_height = get_text_height(canvas, text, font, bulle_width)
-    bulle_height = text_height + 3 * bulle_bords
-
-    # Dessiner l'ombre
-    rectangle_arrondi(canvas,
-                      x_offset + 10,
-                      y_offset + 10,
-                      x_offset + bulle_width + 10,
-                      y_offset + bulle_height + 10,
-                      radius=15,
-                      fill="gray", outline="gray", width=2)
-
-    # Dessiner la bulle
-    rectangle_arrondi(canvas,
-                      x_offset,
-                      y_offset,
-                      x_offset + bulle_width,
-                      y_offset + bulle_height,
-                      radius=15,
-                      fill="#e1f5fe", outline="black", width=2)
-
-    # Ajouter le texte
-    canvas.create_text(x_offset + bulle_bords,
-                       y_offset + bulle_bords,
-                       text=sujet + "\n\n   " + contenu,
-                       font=font,
-                       anchor="nw",
-                       fill="black",
-                       width=bulle_width - 2 * bulle_bords)
-
-    # Retourner la nouvelle position Y pour le prochain message
-    return y_offset + bulle_height + 30  # 30 = espace entre deux bulles
+fenetre, largeur_ecran, hauteur_ecran = start()
+images = charger_images(fenetre)
 
 # Définition des couleurs et styles
 menu_bg = "lightblue"  # Fond du menu
@@ -251,7 +54,7 @@ def parametre(event=None):
 
 
 def boite_de_reception(page):
-    global fenetre_boite, cache_images, canvas
+    global fenetre_boite, canvas
     if page == 1 :
         # Création d'une nouvelle fenêtre
         fenetre_boite = Toplevel(fenetre)
@@ -285,10 +88,10 @@ def boite_de_reception(page):
                 if contact[i]["Nom"] == contact[j]["Nom"]:
                     use = 1
             if use == 0:
-                if contact[i]["Email"] not in cache_images :
-                    cache_images = enregistrer_icone_tkinter(contact)
-                icone = cache_images[contact[i]["Email"]]
-                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email, "boite_principal")).place(
+                if contact[i]["Email"] not in images["cache_image"] :
+                    images["cache_image"] = enregistrer_icone_tkinter(contact)
+                icone = images["cache_image"][contact[i]["Email"]]
+                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(fenetre, email, "boite_principal", images, largeur_ecran, hauteur_ecran)).place(
                     x=largeur_ecran * [0.1, 0.4, 0.7][compteur % 3],
                     y=hauteur_ecran * (0.15 + 0.3 * (compteur // 3)),
                     width=largeur_ecran * 0.2,
@@ -302,10 +105,10 @@ def boite_de_reception(page):
 
         recherche_mail.bind("<FocusIn>", lambda event: vider_saisi_entry(event, recherche_mail))
 
-        bouton_home = Button(fenetre_boite, image=photo_home, relief="flat", command=lambda: home("boite"))
+        bouton_home = Button(fenetre_boite, image=images["home"], relief="flat", command=lambda: fenetre_boite.destroy())
         bouton_home.place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
 
-        bouton_exit = Button(fenetre_boite, image=photo_exit, relief="flat", command=fenetre.quit)
+        bouton_exit = Button(fenetre_boite, image=images["exit"], relief="flat", command=fenetre.quit)
         bouton_exit.place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
 
         if platform.system() in ['Windows', 'Darwin']:
@@ -338,10 +141,10 @@ def boite_de_reception(page):
                 if contact[i]["Nom"] == contact[j]["Nom"]:
                     use = 1
             if use == 0:
-                if contact[i]["Email"] not in cache_images :
-                    cache_images = enregistrer_icone_tkinter(contact)
-                icone = cache_images[contact[i]["Email"]]
-                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email, "boite_principal")).place(
+                if contact[i]["Email"] not in images["cache_image"] :
+                    images["cache_image"] = enregistrer_icone_tkinter(contact)
+                icone = images["cache_image"][contact[i]["Email"]]
+                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(fenetre, email, "boite_principal", images, largeur_ecran, hauteur_ecran)).place(
                     x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
                     y=hauteur_ecran * (0.3 * (compteur // 3)),
                     width=largeur_ecran * 0.2,
@@ -406,10 +209,9 @@ def ecrire_mail():
     ecriture_objet.bind("<FocusIn>", lambda event: vider_saisi_text(event, ecriture_objet))
     ecriture_adresse.bind("<FocusIn>", lambda event: vider_saisi_text(event, ecriture_adresse))
 
-    Label(fenetre_ecriture, image=photo_line, relief="flat").place(x=largeur_ecran*0.05, y=hauteur_ecran*0.03, width=largeur_ecran*0.1, height=hauteur_ecran*0.1)
-    Button(fenetre_ecriture, image=photo_home, relief="flat", command=lambda: home("ecriture")).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
-    Button(fenetre_ecriture, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95,
-                                                                                          y=hauteur_ecran * 0.05)
+    Label(fenetre_ecriture, image=images["line"], relief="flat").place(x=largeur_ecran*0.05, y=hauteur_ecran*0.03, width=largeur_ecran*0.1, height=hauteur_ecran*0.1)
+    Button(fenetre_ecriture, image=images["home"], relief="flat", command=lambda: fenetre_ecriture.destroy()).place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
+    Button(fenetre_ecriture, image=images["exit"], relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95,y=hauteur_ecran * 0.05)
 
     bouton_boite_de_reception = Button(fenetre_ecriture, text="Boite de réception", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", command=lambda: boite_de_reception(2))
     bouton_boite_de_reception.place(x=largeur_ecran*0.12, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
@@ -424,7 +226,7 @@ def ecrire_mail():
     bouton_corbeille.place(x=largeur_ecran*0.72, y=hauteur_ecran*0.055, width=largeur_ecran*0.18, height=hauteur_ecran*0.05)
 
 def envoye_mail():
-    global fenetre_boite, cache_images, canvas
+    global fenetre_boite, canvas
     canvas.delete("all")  # vide le contenu précédent du canvas
     canvas.yview_moveto(0) # remettre le canvas en haut
 
@@ -446,10 +248,10 @@ def envoye_mail():
             if contact[i]["Nom"] == contact[j]["Nom"]:
                 use = 1
         if use == 0:
-            if contact[i]["Email"] not in cache_images :
-                cache_images = enregistrer_icone_tkinter(contact)
-            icone = cache_images[contact[i]["Email"]]
-            Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email, "envoye")).place(
+            if contact[i]["Email"] not in images["cache_image"] :
+                images["cache_image"] = enregistrer_icone_tkinter(contact)
+            icone = images["cache_image"][contact[i]["Email"]]
+            Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(fenetre, email, "envoye", images, largeur_ecran, hauteur_ecran)).place(
                 x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
                 y=hauteur_ecran * (0.3 * (compteur // 3)),
                 width=largeur_ecran * 0.2,
@@ -524,8 +326,8 @@ def label():
     fenetre_label.title("Ecrire un mail")
     fenetre_label.attributes("-fullscreen", True)
 
-    Button(fenetre_label, image=photo_home, relief="flat", command=lambda: home("label")).place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
-    Button(fenetre_label, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
+    Button(fenetre_label, image=images["home"], relief="flat", command=lambda: fenetre_label.destroy()).place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
+    Button(fenetre_label, image=images["exit"], relief="flat", command=fenetre.quit).place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
 
     bouton_creation_label = Button(fenetre_label, text="Création d'un nouvelle catégorie", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
     bouton_creation_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.05, width=largeur_ecran*0.6, height=hauteur_ecran*0.065)
@@ -533,7 +335,7 @@ def label():
 
 
 def corbeille(page):
-    global fenetre_boite, cache_images, canvas
+    global fenetre_boite, canvas
     if page == 1 :
         # Création d'une nouvelle fenêtre
         fenetre_boite = Toplevel(fenetre)
@@ -567,10 +369,10 @@ def corbeille(page):
                 if contact[i]["Nom"] == contact[j]["Nom"]:
                     use = 1
             if use == 0:
-                if contact[i]["Email"] not in cache_images :
-                    cache_images = enregistrer_icone_tkinter(contact)
-                icone = cache_images[contact[i]["Email"]]
-                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email, "corbeille")).place(
+                if contact[i]["Email"] not in images["cache_image"] :
+                    images["cache_image"] = enregistrer_icone_tkinter(contact)
+                icone = images["cache_image"][contact[i]["Email"]]
+                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(fenetre, email, "corbeille", images, largeur_ecran, hauteur_ecran)).place(
                     x=largeur_ecran * [0.1, 0.4, 0.7][compteur % 3],
                     y=hauteur_ecran * (0.15 + 0.3 * (compteur // 3)),
                     width=largeur_ecran * 0.2,
@@ -584,10 +386,10 @@ def corbeille(page):
 
         recherche_mail.bind("<FocusIn>", lambda event: vider_saisi_entry(event, recherche_mail))
 
-        bouton_home = Button(fenetre_boite, image=photo_home, relief="flat", command=lambda: home("boite"))
+        bouton_home = Button(fenetre_boite, image=images["home"], relief="flat", command=lambda: fenetre_boite.destroy())
         bouton_home.place(x=largeur_ecran * 0.05, y=hauteur_ecran * 0.05)
 
-        bouton_exit = Button(fenetre_boite, image=photo_exit, relief="flat", command=fenetre.quit)
+        bouton_exit = Button(fenetre_boite, image=images["exit"], relief="flat", command=fenetre.quit)
         bouton_exit.place(x=largeur_ecran * 0.95, y=hauteur_ecran * 0.05)
 
 
@@ -622,10 +424,10 @@ def corbeille(page):
                 if contact[i]["Nom"] == contact[j]["Nom"]:
                     use = 1
             if use == 0:
-                if contact[i]["Email"] not in cache_images :
-                    cache_images = enregistrer_icone_tkinter(contact)
-                icone = cache_images[contact[i]["Email"]]
-                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email, "corbeille")).place(
+                if contact[i]["Email"] not in images["cache_image"] :
+                    images["cache_image"] = enregistrer_icone_tkinter(contact)
+                icone = images["cache_image"][contact[i]["Email"]]
+                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(fenetre, email, "corbeille", images, largeur_ecran, hauteur_ecran)).place(
                     x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
                     y=hauteur_ecran * (0.3 * (compteur // 3)),
                     width=largeur_ecran * 0.2,
@@ -651,25 +453,25 @@ def page_accueil():
     global bouton_settings
     global bouton_exit
 
-    bouton_boite_de_reception = Button(fenetre, text="Boite de réception", image=photo_mail, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=lambda: boite_de_reception(1))
+    bouton_boite_de_reception = Button(fenetre, text="Boite de réception", image=images["mail"], font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=lambda: boite_de_reception(1))
     bouton_boite_de_reception.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-    bouton_ecrire_mail = Button(fenetre, text="Ecrire un mail", image=photo_ecrire, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=ecrire_mail)
+    bouton_ecrire_mail = Button(fenetre, text="Ecrire un mail", image=images["ecrire"], font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=ecrire_mail)
     bouton_ecrire_mail.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.2, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-    bouton_label = Button(fenetre, text="Categories", image=photo_label, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=label)
+    bouton_label = Button(fenetre, text="Categories", image=images["label"], font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=label)
     bouton_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-    bouton_corbeille = Button(fenetre, text="Corbeille", image=photo_poubelle, font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=lambda: corbeille(1))
+    bouton_corbeille = Button(fenetre, text="Corbeille", image=images["poubelle"], font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black", compound="bottom", pady=20, command=lambda: corbeille(1))
     bouton_corbeille.place(x=largeur_ecran*0.55, y=hauteur_ecran*0.6, width=largeur_ecran*0.25, height=hauteur_ecran*0.25)
 
 
-    bouton_settings = Button(fenetre, image=photo_profil, relief="flat", command=parametre)
+    bouton_settings = Button(fenetre, image=images["profil"], relief="flat", command=parametre)
     bouton_settings.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
-    Button(fenetre, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
+    Button(fenetre, image=images["exit"], relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 
 page_accueil()
 fenetre.mainloop()

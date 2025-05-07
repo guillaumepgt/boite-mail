@@ -7,9 +7,14 @@ def get_credentials():
     if os.path.exists("./private"):
         CREDENTIALS_FILE = "private/token.pkl"
         client_secrets_file = "private/client_secret.json"
-    else:
+    elif os.path.exists("../../private"):
+        CREDENTIALS_FILE = "../../private/token.pkl"
+        client_secrets_file = "../../private/client_secret.json"
+    elif os.path.exists("../private"):
         CREDENTIALS_FILE = "../private/token.pkl"
         client_secrets_file = "../private/client_secret.json"
+    else:
+        return error
 
     SCOPES = ["https://mail.google.com/", "https://www.googleapis.com/auth/userinfo.profile",
               "https://www.googleapis.com/auth/userinfo.email",
