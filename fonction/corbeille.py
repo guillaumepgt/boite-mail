@@ -52,7 +52,7 @@ def recevoir_corbeille():
 
         corbeille.append({
             "id": id,
-            "Email": sender,
+            "Expéditeur": sender,
             "Destinataire": recipient,
             "Sujet": subject,
             "Contenu": body

@@ -115,7 +115,7 @@ def get_text_height(canvas, text, font, width):
     return height
 
 
-def discussion(adresse_mail):
+def discussion(adresse_mail, page):
     global fenetre_discussion
     # Création d'une nouvelle fenêtre (évite les conflits avec Tk)
     fenetre_discussion = Toplevel(fenetre)
@@ -135,9 +135,8 @@ def discussion(adresse_mail):
     canvas.configure(yscrollcommand=my_scrollbar.set)
 
     # Calculer les mails à afficher
-    mails = lire_mail("mail")
-    liste_mails = [m for m in mails if m["Expéditeur"] == adresse_mail]
-
+    mails = lire_mail({"boite_principal":"mail", "envoye":"envoye_list", "corbeille": "corbeille_list"}[page])
+    liste_mails = [m for m in mails if m[{"boite_principal": "Expéditeur", "envoye": "Destinataire", "corbeille": "Expéditeur"}[page]] == adresse_mail]
     # Inverser l’ordre pour avoir du plus ancien au plus récent
     liste_mails = liste_mails[::-1]
 
@@ -289,7 +288,7 @@ def boite_de_reception(page):
                 if contact[i]["Email"] not in cache_images :
                     cache_images = enregistrer_icone_tkinter(contact)
                 icone = cache_images[contact[i]["Email"]]
-                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email)).place(
+                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email, "boite_principal")).place(
                     x=largeur_ecran * [0.1, 0.4, 0.7][compteur % 3],
                     y=hauteur_ecran * (0.15 + 0.3 * (compteur // 3)),
                     width=largeur_ecran * 0.2,
@@ -342,7 +341,7 @@ def boite_de_reception(page):
                 if contact[i]["Email"] not in cache_images :
                     cache_images = enregistrer_icone_tkinter(contact)
                 icone = cache_images[contact[i]["Email"]]
-                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email)).place(
+                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email, "boite_principal")).place(
                     x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
                     y=hauteur_ecran * (0.3 * (compteur // 3)),
                     width=largeur_ecran * 0.2,
@@ -450,7 +449,7 @@ def envoye_mail():
             if contact[i]["Email"] not in cache_images :
                 cache_images = enregistrer_icone_tkinter(contact)
             icone = cache_images[contact[i]["Email"]]
-            Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email)).place(
+            Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email, "envoye")).place(
                 x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
                 y=hauteur_ecran * (0.3 * (compteur // 3)),
                 width=largeur_ecran * 0.2,
@@ -571,7 +570,7 @@ def corbeille(page):
                 if contact[i]["Email"] not in cache_images :
                     cache_images = enregistrer_icone_tkinter(contact)
                 icone = cache_images[contact[i]["Email"]]
-                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email)).place(
+                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email, "corbeille")).place(
                     x=largeur_ecran * [0.1, 0.4, 0.7][compteur % 3],
                     y=hauteur_ecran * (0.15 + 0.3 * (compteur // 3)),
                     width=largeur_ecran * 0.2,
@@ -626,7 +625,7 @@ def corbeille(page):
                 if contact[i]["Email"] not in cache_images :
                     cache_images = enregistrer_icone_tkinter(contact)
                 icone = cache_images[contact[i]["Email"]]
-                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email)).place(
+                Button(frame_boite, compound="top", text=contact[i]["Nom"], image=icone, font=("Arial", 20),bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black",command=lambda email=contact[i]["Email"]: discussion(email, "corbeille")).place(
                     x=largeur_ecran * [0.05, 0.35, 0.65][compteur % 3],
                     y=hauteur_ecran * (0.3 * (compteur // 3)),
                     width=largeur_ecran * 0.2,
@@ -671,11 +670,6 @@ def page_accueil():
     bouton_settings = Button(fenetre, image=photo_profil, relief="flat", command=parametre)
     bouton_settings.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
     Button(fenetre, image=photo_exit, relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
-
-
-
-
-
 
 page_accueil()
 fenetre.mainloop()

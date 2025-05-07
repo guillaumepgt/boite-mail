@@ -20,11 +20,16 @@ def recevoir_email(type, nombre):
         "messages": service.users().messages(),
         "drafts": service.users().drafts()
     }
-
+    params = {
+        "userId": "me",
+        "maxResults": nombre,
+        "includeSpamTrash": True
+    }
     full_email_list = []
-
+    if type == "messages":
+        params["labelIds"] = "INBOX"
     try:
-        results = type2[type].list(userId="me", maxResults=nombre).execute()
+        results = type2[type].list(**params).execute()
         messages = results.get("messages" if type == "messages" else "drafts", [])
     except errors.HttpError as error:
         print(f"Erreur lors de la récupération des {type} : {error}")

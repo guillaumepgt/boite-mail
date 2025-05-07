@@ -29,6 +29,10 @@ def recevoir_info(label=None, recipient_field="From"):
         "maxResults": 1000,
         "includeSpamTrash": True
     }
+
+    if label:
+        params["labelIds"] = label
+
     results = service.users().messages().list(**params).execute()
     messages = results.get("messages", [])
 
@@ -60,4 +64,4 @@ except ImportError:
     # Si le fichier est lancé directement, en standalone
     from get_tokens import *
     if __name__ == "__main__":
-        print("✅ Emails récupérés avec succès !\n", recevoir_info())
+        print("✅ Emails récupérés avec succès !\n", recevoir_info(label="TRASH", recipient_field="From"))
