@@ -50,6 +50,19 @@ def afficher_message(canvas, expediteur, destinataire, sujet, contenu, y_offset,
     # Retourner la nouvelle position Y pour le prochain message
     return y_offset + bulle_height + 30  # 30 = espace entre deux bulles
 
+def modifier_brouillon(brouillon, ecriture_objet, ecriture_mail):
+    ecriture_objet.delete("1.0", "end")
+    ecriture_mail.delete("1.0", "end")
+    # Remplir l'objet si le champ est encore vide ou inchangé
+    if ecriture_objet.get("1.0", "end-1c").strip() in ["", "Ecrire un objet"]:
+        ecriture_objet.delete("1.0", "end")
+        ecriture_objet.insert("1.0", brouillon["Sujet"])
+
+    # Remplir le contenu si le champ est encore vide ou inchangé
+    if ecriture_mail.get("1.0", "end-1c").strip() in ["", "Ecrire un mail"]:
+        ecriture_mail.delete("1.0", "end")
+        ecriture_mail.insert("1.0", brouillon["Contenu"])
+
 try:
     from fonction.graphique.fonction_design import *
 except ModuleNotFoundError:
