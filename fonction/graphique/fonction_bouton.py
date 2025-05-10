@@ -26,6 +26,10 @@ def parametre(fenetre, bouton_settings):
     if bouton_settings:
         choix.post(bouton_settings.winfo_rootx(), bouton_settings.winfo_rooty() + bouton_settings.winfo_height())
 
+def add_nav_buttons(fenetre, images, largeur, hauteur, quit_command, back_command=None):
+    Button(fenetre, image=images["home"], relief="flat", command=back_command or fenetre.destroy).place(x=largeur*0.05, y=hauteur*0.05)
+    Button(fenetre, image=images["exit"], relief="flat", command=quit_command).place(x=largeur*0.95, y=hauteur*0.05)
+
 try:
     from fonction.recevoir_information import *
 except ModuleNotFoundError:

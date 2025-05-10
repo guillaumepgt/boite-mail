@@ -1,3 +1,5 @@
+import platform
+
 def vider_saisi_entry(event, entry):
     if entry.get() == "Recherche des mails":
         entry.delete(0, END)
@@ -62,6 +64,25 @@ def modifier_brouillon(brouillon, ecriture_objet, ecriture_mail):
     if ecriture_mail.get("1.0", "end-1c").strip() in ["", "Ecrire un mail"]:
         ecriture_mail.delete("1.0", "end")
         ecriture_mail.insert("1.0", brouillon["Contenu"])
+
+def scroll_canvas(canvas, event):
+    if platform.system() == 'Windows':
+        canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+    elif platform.system() == 'Darwin':
+        canvas.yview_scroll(int(-1 * event.delta), "units")
+    else:  # Linux
+        if event.num == 4:
+            canvas.yview_scroll(-1, "units")
+        elif event.num == 5:
+            canvas.yview_scroll(1, "units")
+
+def bind_scroll_events(canvas):
+    if platform.system() in ['Windows', 'Darwin']:
+        canvas.bind_all("<MouseWheel>", lambda e: scroll_canvas(canvas, e))
+    else:
+        canvas.bind_all("<Button-4>", lambda e: scroll_canvas(canvas, e))
+        canvas.bind_all("<Button-5>", lambda e: scroll_canvas(canvas, e))
+
 
 try:
     from fonction.graphique.fonction_design import *
