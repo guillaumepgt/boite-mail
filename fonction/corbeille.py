@@ -67,4 +67,5 @@ try:
 except ImportError:
     # Si le fichier est lancé directement, en standalone
     from get_tokens import *
-    print(recevoir_corbeille())
+    if __name__ == "__main__":
+        print(recevoir_corbeille())
