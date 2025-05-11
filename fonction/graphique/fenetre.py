@@ -163,7 +163,7 @@ def label(fenetre, images, largeur_ecran, hauteur_ecran):
 
     add_nav_buttons(fenetre_label, images, largeur_ecran, hauteur_ecran, fenetre.quit, fenetre_label.destroy)
 
-    bouton_creation_label = Button(fenetre_label, text="Création d'un nouvelle catégorie", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
+    bouton_creation_label = Button(fenetre_label, text="Création d'une nouvelle catégorie", font=("Arial", 20), bg="lightblue", fg="black", relief="flat", activebackground="white", activeforeground="black")
     bouton_creation_label.place(x=largeur_ecran*0.2, y=hauteur_ecran*0.05, width=largeur_ecran*0.6, height=hauteur_ecran*0.065)
 
 def page_accueil(fenetre, images, largeur_ecran, hauteur_ecran):
