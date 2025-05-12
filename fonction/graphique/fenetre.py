@@ -172,7 +172,7 @@ def page_accueil(fenetre, images, largeur_ecran, hauteur_ecran):
     creer_bouton(fenetre, images, largeur_ecran, hauteur_ecran, 0.2, 0.6, "label", "Categories", lambda: label(fenetre, images, largeur_ecran, hauteur_ecran))
     creer_bouton(fenetre, images, largeur_ecran, hauteur_ecran, 0.55, 0.6, "poubelle", "Corbeille", lambda: reception(fenetre, images, largeur_ecran, hauteur_ecran, 1, "corbeille"))
 
-    bouton_settings = Button(fenetre, image=images["profil"], relief="flat", command=lambda: parametre(fenetre, bouton_settings))
+    bouton_settings = Button(fenetre, image=images["profil"], relief="flat", command=lambda: parametre(fenetre, bouton_settings, images, largeur_ecran, hauteur_ecran))
     bouton_settings.place(x=largeur_ecran*0.05, y=hauteur_ecran*0.05)
     Button(fenetre, image=images["exit"], relief="flat", command=fenetre.quit).place(x=largeur_ecran*0.95, y=hauteur_ecran*0.05)
 

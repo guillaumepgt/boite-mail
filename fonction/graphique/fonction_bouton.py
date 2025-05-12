@@ -1,21 +1,21 @@
 from tkinter import *
 import shutil
 
-def deconnexion():
+def deconnexion(fenetre, images, largeur, hauteur):
     os.remove("private/token.pkl")
     shutil.rmtree("private/icones")
     os.remove("private/mail/mail.json")
     chemin_image_profil = r"img/profil.png"
     photo_profil = PhotoImage(file=chemin_image_profil)
     photo_profil.image = photo_profil
-    page_accueil()
+    page_accueil(fenetre, images, largeur, hauteur)
 
 
-def parametre(fenetre, bouton_settings):
+def parametre(fenetre, bouton_settings, images, largeur, hauteur):
     choix = Menu(fenetre, tearoff=0, bg="lightblue", fg="#23272A", font=("Arial", 12, "bold"), activebackground="#7289DA", activeforeground="white", relief="raised", borderwidth=3)
     if connecter() :
         # Ajout des options avec des icônes (si tu en as)
-        choix.add_command(label="👤 Deconnexion", command=deconnexion)
+        choix.add_command(label="👤 Deconnexion", command=lambda: deconnexion(fenetre, images, largeur, hauteur))
 
     elif not connecter() :
         choix.add_command(label="👤 Connexion", command=get_credentials)
