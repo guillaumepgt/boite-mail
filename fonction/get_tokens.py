@@ -38,5 +38,3 @@ def get_credentials():
         with open(CREDENTIALS_FILE, 'wb') as token:
             pickle.dump(creds, token)
     return creds
-
-get_credentials()

@@ -1,11 +1,15 @@
 from tkinter import *
 import platform
+import asyncio
+import threading
+import queue
 
 def start():
     win = create_fullscreen("Boite Mail")
     return win, win.winfo_screenwidth(), win.winfo_screenheight()
 
 def discussion(fenetre, adresse_mail, page, images, largeur_ecran, hauteur_ecran):
+    threading.Thread(target=start_async_loop, daemon=True).start()
     fenetre_discussion = create_fullscreen("Discuter", fenetre)
     add_nav_buttons(fenetre_discussion, images, largeur_ecran, hauteur_ecran, fenetre.quit)
 
