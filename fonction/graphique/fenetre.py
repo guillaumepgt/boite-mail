@@ -13,7 +13,7 @@ def discussion(fenetre, adresse_mail, page, images, largeur_ecran, hauteur_ecran
     bind_scroll_events(canvas)
 
     mails = lire_mail({"boite_principal": "mail", "envoye": "envoye_list", "corbeille": "corbeille_list"}[page])
-    field = {"boite_principal": "Expéditeur", "envoye": "Destinataire", "corbeille": "Expéditeur"}[page]
+    field = {"boite_principal": "Expediteur", "envoye": "Destinataire", "corbeille": "Expediteur"}[page]
     liste_mails = [m for m in reversed(mails) if m[field] == adresse_mail]
 
     font, bulle_width, bulle_bords = ("Courier", 14), largeur_ecran * 0.6, 20
@@ -21,7 +21,7 @@ def discussion(fenetre, adresse_mail, page, images, largeur_ecran, hauteur_ecran
     y_offset = max(20, hauteur_ecran * 0.8 - total_height)
 
     for mail in liste_mails:
-        y_offset = afficher_message(canvas, mail["Expéditeur"], mail["Destinataire"], mail["Sujet"], mail["Contenu"], y_offset, largeur_ecran, hauteur_ecran)
+        y_offset = afficher_message(canvas, mail["Expediteur"], mail["Destinataire"], mail["Sujet"], mail["Contenu"], y_offset, largeur_ecran, hauteur_ecran)
 
     canvas.configure(scrollregion=(0, 0, largeur_ecran * 0.8, y_offset))
     canvas.yview_moveto(1.0)

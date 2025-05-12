@@ -54,7 +54,7 @@ def recevoir_email(type, nombre):
         # if (recipient == user_email and type == "messages") or type == "drafts":
         full_email_list.append({
                 "id": msg["id"],
-                "Expéditeur": sender,
+                "Expediteur": sender,
                 "Destinataire": recipient,
                 "Sujet": subject,
                 "Contenu": body

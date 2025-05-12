@@ -37,7 +37,7 @@ if __name__ == "__main__":
     arbre = Arbre("Boîte mail")
 
     for mail in mails:
-        expediteur = mail.get("Expéditeur", "Inconnu")
+        expediteur = mail.get("Expediteur", "Inconnu")
         sujet = mail.get("Sujet", "Sans sujet")
         arbre.ajouter_mail(expediteur, sujet, mail)
 

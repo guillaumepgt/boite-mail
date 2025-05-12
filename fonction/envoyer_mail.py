@@ -45,7 +45,7 @@ def recevoir_envoyes():
 
         envoyes.append({
             "id": message_id,
-            "Expéditeur": sender,
+            "Expediteur": sender,
             "Destinataire": recipient,
             "Sujet": subject,
             "Contenu": body
