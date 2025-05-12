@@ -1,0 +1,7 @@
+tkinter \
+platform \
+asyncio \
+shutil \
+pickle \
+google-auth-oauthlib \
+flask

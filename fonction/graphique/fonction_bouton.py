@@ -1,4 +1,5 @@
 from tkinter import *
+import shutil
 
 def deconnexion():
     os.remove("private/token.pkl")
@@ -32,7 +33,9 @@ def add_nav_buttons(fenetre, images, largeur, hauteur, quit_command, back_comman
 
 try:
     from fonction.recevoir_information import *
+    from fonction.graphique.fenetre import *
 except ModuleNotFoundError:
     import sys
+    from fenetre import *
     sys.path.append("..")
     from recevoir_information import *
